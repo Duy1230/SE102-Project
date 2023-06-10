@@ -19,3 +19,4 @@ height	240
 20	textures\misc.png
 30	textures\mario_background.png
 40	textures\mario_enemies.png
+50	textures\level.png

@@ -187,6 +187,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="mario.ico" />
+    <Image Include="textures\bbox.png" />
+    <Image Include="textures\enemies.png" />
+    <Image Include="textures\mario.png" />
+    <Image Include="textures\mario_background.png" />
+    <Image Include="textures\mario_enemies.png" />
+    <Image Include="textures\misc.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

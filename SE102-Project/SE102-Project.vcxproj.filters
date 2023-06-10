@@ -162,6 +162,24 @@
     <Image Include="mario.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="textures\bbox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemies.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\mario.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\mario_background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\mario_enemies.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\misc.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
