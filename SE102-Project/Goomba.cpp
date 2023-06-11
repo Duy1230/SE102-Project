@@ -1,4 +1,11 @@
 #include "Goomba.h"
+#include "Platform.h"
+#include "Coin.h"
+
+#include "PlayScene.h"
+#include "Game.h"
+
+
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
@@ -34,6 +41,16 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CPlatform*>(e->obj))
+	{
+		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
+		if (plat->GetSpriteBegin() >= 54000)
+		{
+			CGameObject* coin = new CCoin(240, 120);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(coin, 240, 120);
+			return;
+		}
+	}
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
 

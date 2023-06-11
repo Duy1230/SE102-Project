@@ -1,10 +1,11 @@
 #pragma once
 
 #include "KeyEventHandler.h"
-
+#include "KeyEventHandler.h"
 /*
 *  Abstract class for a game scene
 */
+
 class CScene
 {
 protected:
@@ -19,12 +20,14 @@ public:
 		this->sceneFilePath = filePath;
 		this->key_handler = NULL;
 	}
-
+	
 	LPKEYEVENTHANDLER GetKeyEventHandler() { return key_handler; }
 	virtual void Load() = 0;
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
-	virtual void Render() = 0; 
+	virtual void Render() = 0;
+	//NEW
+	//virtual void AddObject(CGameObject* obj, float x, float y)=0;
 };
 typedef CScene * LPSCENE;
 

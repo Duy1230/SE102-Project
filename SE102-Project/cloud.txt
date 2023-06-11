@@ -8,9 +8,26 @@
 53001	3	6	52	23	30
 53002	624	400	639	433	50
 53003	630	400	645	433	50
+#invisible block
+53004	70	50	75	55	30
+#pipe
+53005	4	27	37	76	30
 
 #background objects
+#bush
 54000	54	6	71	23	30
+#hill large
+54001	2	79	131	144	30
+#hill small
+54002	25	334	90	383	30
+#cloud1
+54003	127	0	162	27	30
+#cloud2
+54004	73	1	124	26	30
+#boxstack_small
+54005	135	69	224	150	30
+#boxstack_large
+54006	232	36	451	151	30
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]

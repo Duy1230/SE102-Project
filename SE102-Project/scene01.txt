@@ -12,7 +12,7 @@ cloud.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-2	20	10
+0	20	10
 
 # BRICKS
 1	0	148
@@ -53,7 +53,7 @@ cloud.txt
 4	180	120
 
 #Goomba
-0	300	10
+2	300	10
 
 #Platform
 #    	x	y	cell_w	cell_h	length	sprite1	sprite2	sprite3  

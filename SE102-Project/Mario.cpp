@@ -3,6 +3,7 @@
 
 #include "Mario.h"
 #include "Game.h"
+#include "PlayScene.h"
 
 #include "Goomba.h"
 #include "Coin.h"
@@ -283,6 +284,7 @@ void CMario::SetState(int state)
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
+			
 		}
 		break;
 
