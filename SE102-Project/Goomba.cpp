@@ -47,7 +47,9 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (plat->GetSpriteBegin() >= 54000)
 		{
 			CGameObject* coin = new CCoin(240, 120);
-			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(coin, 240, 120);
+			float mario_x = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetX();
+			float mario_y = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetY();
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(coin, mario_x, mario_y);
 			return;
 		}
 	}

@@ -36,7 +36,8 @@ goomba.txt
 4	180	80
 
 #PLATFORM
-#    	x	y	cell_w	cell_h	length	sprite1	sprite2	sprite3  
+#    	x	y	cell_w	cell_h	length	sprite1	sprite2	sprite3
+5 	-10	194	15	200	1	53002	53002	53002 
 5 	20	194	48	17	14	53001	53001	53001
 5 	676	186	15	34	1	53002	53002	53002
 5 	690	186	15	34	33	53003	53003	53003
