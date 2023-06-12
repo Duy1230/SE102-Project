@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "PlayScene.h"
 
+#include "Brick.h"
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
@@ -55,6 +56,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -93,9 +96,26 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	e->obj->Delete();
-	coin++;
+	CCoin* b = dynamic_cast<CCoin*>(e->obj);
+	if (b->aniID != ID_ANI_COIN_Q)
+	{
+		e->obj->Delete();
+		coin++;
+	}
 }
+
+void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+	if (brick->AniID == ID_ANI_BRICK_Q && e->ny > 0)
+	{
+		brick->AniID = ID_ANI_BRICK_Q_NULL;
+		CGameObject* Ccoin = new CCoin(brick->GetX(), brick->GetY(), ID_ANI_COIN_Q);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(Ccoin, brick->GetX(), brick->GetY() + 10);
+		coin++;
+	}
+}
+
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {

@@ -4,14 +4,21 @@
 #include "Animation.h"
 #include "Animations.h"
 
+
 #define ID_ANI_BRICK 10000
+#define ID_ANI_BRICK_Q 10001
+#define ID_ANI_BRICK_Q_NULL 10002
+
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16
-#define BRICK_BBOX_HEIGHT 16
+#define BRICK_BBOX_HEIGHT 17
 
 class CBrick : public CGameObject {
 public:
-	CBrick(float x, float y) : CGameObject(x, y) {}
+	int AniID;
+	CBrick(float x, float y, int aniID) : CGameObject(x, y) {
+		this->AniID = aniID;
+	}
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
