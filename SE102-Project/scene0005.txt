@@ -5,6 +5,8 @@ coin.txt
 cloud.txt
 brick.txt
 goomba.txt
+flower.txt
+fireball.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -61,8 +63,7 @@ goomba.txt
 5 	365	30	35	26	1	54003	54003	54003
 5 	725	60	35	26	1	54003	54003	54003
 5 	825	90	51	25	1	54004	54004	54004
-#Pipe
-5 	390	162	33	48	1	53005	53005	53005
+
 #Colorbox_2
 5 	543	130	219	115	1	54006	54006	54006
 5 	442	140	5	5	15	53004	53004	53004
@@ -92,6 +93,11 @@ goomba.txt
 4	760	120	11002
 1	760	120	10001
 
+#FLOWER
+6	390	159
+
+#Pipe
+5 	390	162	33	48	1	53005	53005	53005
 
 #GOOMBA
 2	300	10

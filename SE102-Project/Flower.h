@@ -4,10 +4,10 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define ID_ANI_FLOWER 13000
+#define ID_ANI_FLOWER 12000
 #define	FLOWER_WIDTH 10
-#define FLOWER_BBOX_WIDTH 16
-#define FLOWER_BBOX_HEIGHT 24
+#define FLOWER_BBOX_WIDTH 17
+#define FLOWER_BBOX_HEIGHT 33
 
 #define FLOWER_STATE_MOVEUP 100
 #define FLOWER_STATE_MOVEDOWN 200
@@ -16,7 +16,7 @@
 
 #define FLOWER_SPEED 0.02f
 #define FLOWER_STOP_TIME 2000
-#define FLOWER_MOVE_TIME 1000
+#define FLOWER_MOVE_TIME 1800
 
 #define FIREBALL_FLOWER_SPEED_SCALING 600
 class CFlower : public CGameObject {

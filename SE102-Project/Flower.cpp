@@ -1,10 +1,10 @@
 #include "Flower.h"
 #include "Fireball.h"
-#include "Point.h"
 #include "Mario.h"
 
-extern list<LPGAMEOBJECT> objects;
-extern CMario* mario;
+#include "PlayScene.h"
+#include "Game.h"
+
 
 void CFlower::InitPoints()
 {
@@ -25,8 +25,8 @@ void CFlower::InitPoints()
 }
 
 void CFlower::calculateDistance() {
-	float mario_x = mario->GetX();
-	float mario_y = mario->GetY();
+	float mario_x = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetX();
+	float mario_y = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetY();
 	for (int i = 0; i < 7; i++) {
 		distance[i] = sqrt((mario_x - pointOfInterest[2 * i]) * (mario_x - pointOfInterest[2 * i]) + (mario_y - pointOfInterest[2 * i + 1]) * (mario_y - pointOfInterest[2 * i + 1]));
 	}
@@ -104,8 +104,8 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		state = FLOWER_STATE_STOP_DOWN;
 		this->SetState(state);
 
-		float mario_x = mario->GetX();
-		float mario_y = mario->GetY();
+		float mario_x = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetX();
+		float mario_y = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetY();
 
 		if (sqrt((mario_x - x) * (mario_x - x) + (mario_y - y) * (mario_y - y)) < 200.0f) {
 			InitPoints();
@@ -115,8 +115,8 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			float fireball_vx = (pointOfInterest[directionIndex] - x) / FIREBALL_FLOWER_SPEED_SCALING;
 			float fireball_vy = (pointOfInterest[directionIndex + 1] - y) / FIREBALL_FLOWER_SPEED_SCALING;
 
-			CFireBall* f = new CFireBall(x, y, fireball_vx, fireball_vy);
-			objects.push_back(f);
+			CGameObject* fireball = new CFireBall(x, y, fireball_vx, fireball_vy);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(fireball, x, y);
 		}
 		
 	}
@@ -135,12 +135,12 @@ void CFlower::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	if (state == FLOWER_STATE_STOP_DOWN) {
-		animations->Get(ID_ANI_FLOWER + 2)->Render(x, y);
+		animations->Get(ID_ANI_FLOWER + 1)->Render(x, y);
 	}
 	else {
-		animations->Get(ID_ANI_FLOWER + 1)->Render(x, y);
+		animations->Get(ID_ANI_FLOWER)->Render(x, y);
 	}
 	
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
