@@ -5,9 +5,12 @@
 #include "Animations.h"
 
 
-#define ID_ANI_BRICK 10000
-#define ID_ANI_BRICK_Q 10001
-#define ID_ANI_BRICK_Q_NULL 10002
+#define ID_ANI_BRICK 9999
+#define ID_ANI_BRICK_NULL 10000
+#define ID_ANI_BRICK_COIN 10001
+#define ID_ANI_BRICK_MUSHROOM 10002
+#define ID_ANI_BRICK_LEAF 10003
+
 
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16

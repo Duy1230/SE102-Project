@@ -7,6 +7,7 @@ brick.txt
 goomba.txt
 flower.txt
 fireball.txt
+mushroom.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -76,21 +77,14 @@ fireball.txt
 #BRICK AND Q COIN
 
 1	200	130	10001
-#4	200	130	11002
 1	215	130	10001
-#4	215	130	11002
 
 1	250	85	10001
-4	250	85	11002
-1	265	85	10001
-4	265	85	11002
+1	265	85	10002
 
-4	460	100	11002
 1	460	100	10001
 
-4	710	161	11002
 1	710	161	10001
-4	760	120	11002
 1	760	120	10001
 
 #FLOWER

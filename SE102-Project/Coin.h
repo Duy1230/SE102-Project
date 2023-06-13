@@ -15,11 +15,11 @@
 #define QCOIN_STATE_INIT 100
 #define QCOIN_STATE_FINAL 200
 #define QCOIN_SPEED 0.5f
-#define QCOIN_TIMEOUT 400
+#define QCOIN_TIMEOUT 350
 
 class CCoin : public CGameObject {
 public:
-	ULONGLONG goUp_begin;
+	ULONGLONG goUp_begin = -1;
 	int aniID;
 	CCoin(float x, float y, int aniID) : CGameObject(x, y) { 
 		this->aniID = aniID;

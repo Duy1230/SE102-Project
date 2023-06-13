@@ -47,7 +47,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isDeleted = true;
 		return;
 	}
-	else if ((state == QCOIN_STATE_FINAL) && (GetTickCount64() - goUp_begin > QCOIN_TIMEOUT / 2))
+	else if ((state == QCOIN_STATE_FINAL) && (GetTickCount64() - goUp_begin > QCOIN_TIMEOUT / 1.8))
 	{
 		vy = QCOIN_SPEED;
 	}

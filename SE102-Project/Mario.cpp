@@ -11,6 +11,7 @@
 #include "Portal.h"
 #include "Fireball.h"
 #include "Flower.h"
+#include "Mushroom.h"
 
 #include "Collision.h"
 
@@ -113,13 +114,32 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-	if (brick->AniID == ID_ANI_BRICK_Q && e->ny > 0)
+	if (brick->AniID > ID_ANI_BRICK_NULL && e->ny > 0)
 	{
-		brick->AniID = ID_ANI_BRICK_Q_NULL;
-		CGameObject* Ccoin = new CCoin(brick->GetX(), brick->GetY(), ID_ANI_COIN_Q);
-		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(Ccoin, brick->GetX(), brick->GetY() + 10);
-		coin++;
+		int animationID = (int)brick->AniID;
+		switch (animationID)
+		{
+		case ID_ANI_BRICK_COIN:
+		{
+			CGameObject* Ccoin = new CCoin(brick->GetX(), brick->GetY(), ID_ANI_COIN_Q);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(Ccoin, brick->GetX(), brick->GetY() + 10);
+			coin++;
+		}
+		break;
+			
+		case ID_ANI_BRICK_MUSHROOM:
+		{
+			CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY());
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
+		}
+		break;
+
+		}
+		brick->AniID = ID_ANI_BRICK_NULL;
+		
 	}
+
+	
 }
 
 void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
