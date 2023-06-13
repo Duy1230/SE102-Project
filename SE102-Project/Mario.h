@@ -120,6 +120,8 @@ class CMario : public CGameObject
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
+	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -148,6 +150,8 @@ public:
 	}
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+
+	int Getlevel() { return level; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

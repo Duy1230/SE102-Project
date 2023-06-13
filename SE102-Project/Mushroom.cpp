@@ -42,7 +42,6 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	float v = vx;
 	if (!e->obj->IsBlocking()) return;
 
 	if (e->ny != 0)
@@ -80,6 +79,7 @@ void CMushroom::SetState(int state)
 		ax = 0;
 		break;
 	case MUSHROOM_STATE_MOVE:
+
 		vx = MUSHROOM_SPEED;
 		ay = MUSHROOM_GRAVITY;
 		break;

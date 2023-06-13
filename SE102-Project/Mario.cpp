@@ -12,6 +12,7 @@
 #include "Fireball.h"
 #include "Flower.h"
 #include "Mushroom.h"
+#include "Leaf.h"
 
 #include "Collision.h"
 
@@ -65,6 +66,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFlower(e);
 	else if (dynamic_cast<CFireBall*>(e->obj))
 		OnCollisionWithFireBall(e);
+	else if (dynamic_cast<CLeaf*>(e->obj))
+		OnCollisionWithLeaf(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -111,6 +116,23 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
+{
+
+	e->obj->Delete();
+}
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	CMushroom* m = dynamic_cast<CMushroom*>(e->obj);
+	if (m->GetState() != MUSHROOM_STATE_INIT)
+	{
+		e->obj->Delete();
+		this->level = 2;
+		y -= 6;
+	}
+}
+
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
@@ -129,8 +151,19 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 			
 		case ID_ANI_BRICK_MUSHROOM:
 		{
-			CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY());
-			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
+			int state = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->Getlevel();
+
+			if (state == MARIO_LEVEL_SMALL)
+			{
+				CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY());
+				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
+			}
+			else if (state == MARIO_LEVEL_BIG)
+			{
+				CGameObject* leaf = new CLeaf(brick->GetX(), brick->GetY());
+				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(leaf, brick->GetX(), brick->GetY() - 16);
+			}
+			
 		}
 		break;
 

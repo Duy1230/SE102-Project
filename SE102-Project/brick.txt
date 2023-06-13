@@ -21,9 +21,9 @@
 #brick that create coin
 10001	20002	500	20003	500	20004	500	20005	500
 
-#brick that create mushroom
+#brick that create mushroom and leaf
 10002	20002	500	20003	500	20004	500	20005	500
 
-#brick that create leaf
+#unused
 10003	20002	500	20003	500	20004	500	20005	500
 
