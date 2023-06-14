@@ -232,10 +232,17 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		int marioLevel = mario->Getlevel();
 
 		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT) {
-			if (mario->GetNx()==1)
+			if (mario->GetNx() == 1)
+			{
+				this->x = mario->GetX() - 10;
 				this->SetState(KOOPAS_STATE_WALKING_RIGHT);
+			}
 			else
+			{
+				this->x= mario->GetX() + 10;
 				this->SetState(KOOPAS_STATE_WALKING_LEFT);
+			}
+				
 			if (marioLevel == 2) {
 				mario->SetLevel(1);
 			}
@@ -245,6 +252,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 		else if (mario->isHolding == false) {
+			if (mario->GetNx() == 1)
+				this->x = mario->GetX() - 10;
+			else
+				this->x = mario->GetX() + 10;
+
 			this->SetState(KOOPAS_STATE_BOOST);
 		}
 		else {
