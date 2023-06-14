@@ -14,8 +14,8 @@
 
 #define QCOIN_STATE_INIT 100
 #define QCOIN_STATE_FINAL 200
-#define QCOIN_SPEED 0.5f
-#define QCOIN_TIMEOUT 350
+#define QCOIN_SPEED 0.3f
+#define QCOIN_TIMEOUT 550
 
 class CCoin : public CGameObject {
 public:

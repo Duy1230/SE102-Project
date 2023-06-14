@@ -4,8 +4,8 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define LEAF_SPEED_MOVEUP 0.1f
-#define LEAF_SPEED_X 0.07f
+#define LEAF_SPEED_MOVEUP 0.07f
+#define LEAF_SPEED_X 0.09f
 #define LEAF_SPEED_Y 0.02f
 
 #define ID_ANI_LEAF_FALL_RIGHT 15000
@@ -19,7 +19,7 @@
 #define LEAF_STATE_FALL_RIGHT 200
 #define LEAF_STATE_FALL_LEFT 300
 
-#define LEAF_TIME_MOVEUP 300
+#define LEAF_TIME_MOVEUP 500
 #define LEAF_TIME_TURN 500
 
 class CLeaf : public CGameObject {

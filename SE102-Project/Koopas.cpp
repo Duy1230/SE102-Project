@@ -1,0 +1,358 @@
+#include "Koopas.h"
+#include "Goomba.h"
+#include "Flower.h"
+#include "Fireball.h"
+#include "Platform.h"
+#include "Coin.h"
+#include "Mushroom.h"
+#include "Leaf.h"
+
+#include "PlayScene.h"
+#include "Game.h"
+
+
+CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
+{
+	aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
+	direction = 1;
+	this->ax = 0;
+	this->ay = KOOPAS_GRAVITY;
+	die_start = -1;
+	SetState(KOOPAS_STATE_WALKING_RIGHT);
+}
+
+
+
+void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	left = x - KOOPAS_BBOX_WIDTH / 2;
+	top = y - KOOPAS_BBOX_HEIGHT_STOP / 2;
+	right = left + KOOPAS_BBOX_WIDTH;
+	bottom = top + KOOPAS_BBOX_HEIGHT_STOP;
+	/*
+	if (state == KOOPAS_STATE_STOP || state == KOOPAS_STATE_BOOST)
+	{
+		left = x - KOOPAS_BBOX_WIDTH / 2;
+		top = y - KOOPAS_BBOX_HEIGHT_STOP / 2;
+		right = left + KOOPAS_BBOX_WIDTH;
+		bottom = top + KOOPAS_BBOX_HEIGHT_STOP;
+	}
+	else
+	{
+		left = x - KOOPAS_BBOX_WIDTH / 2;
+		top = y - KOOPAS_BBOX_HEIGHT / 2;
+		right = left + KOOPAS_BBOX_WIDTH;
+		bottom = top + KOOPAS_BBOX_HEIGHT;
+	}
+	*/
+}
+
+void CKoopas::OnNoCollision(DWORD dt)
+{
+	x += vx * dt;
+	y += vy * dt;
+};
+
+void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+
+	if (dynamic_cast<CKoopas*>(e->obj)) {
+		OnCollisionWithBoostKoopas(e);
+		return;
+	}
+	
+	else if (dynamic_cast<CPlatform*>(e->obj)) {
+		OnCollisionWithBoostPlatform(e);
+		return;
+	}
+
+	else if (dynamic_cast<CBrick*>(e->obj)) {
+		OnCollisionWithBrick(e);
+		return;
+	}
+	
+	else if (dynamic_cast<CGoomba*>(e->obj)) {
+		if(e->obj->GetState() == GOOMBA_STATE_WALKING)
+			e->obj->SetState(GOOMBA_STATE_DIE_KOOPAS);
+		return;
+	}
+
+	else if (dynamic_cast<CFlower*>(e->obj)) {
+		if (state == KOOPAS_STATE_BOOST)
+			e->obj->Delete();
+		return;
+	}
+
+	
+	if (!e->obj->IsBlocking()) return;
+
+	if (e->ny != 0)
+	{
+		vy = 0;
+		return;
+	}
+	else if (e->nx != 0)
+	{
+		vx = -vx;
+		if ((state == KOOPAS_STATE_WALKING_LEFT || state == KOOPAS_STATE_WALKING_RIGHT))
+		{
+			if (direction == 1)
+			{
+				aniID = ID_ANI_KOOPAS_WALKING_LEFT;
+				direction = -1;
+			}
+
+			else
+			{
+				aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
+				direction = 1;
+			}
+		}
+	}
+	
+	/*
+	else if (dynamic_cast<CBrick*>(e->obj) && e->nx != 0 && state == KOOPAS_STATE_BOOST) {
+		CBrick* b = dynamic_cast<CBrick*>(e->obj);
+		vx = -vx;
+		if (b->AniID == GBRICK_STATE_BREAK)
+		{
+			b->SetState(GBRICK_STATE_BREAK);
+		}
+	}
+	*/
+
+}
+
+void CKoopas::OnCollisionWithBoostPlatform(LPCOLLISIONEVENT e)
+{
+	CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
+	if (!e->obj->IsBlocking()) return;
+
+	if (e->ny != 0)
+	{
+		vy = 0;
+		return;
+	}
+	else if (e->nx != 0)
+	{
+		
+		if ((state == KOOPAS_STATE_WALKING_LEFT || state == KOOPAS_STATE_WALKING_RIGHT))
+		{
+			if (direction == 1)
+				this->SetState(KOOPAS_STATE_WALKING_LEFT);
+			else
+				this->SetState(KOOPAS_STATE_WALKING_RIGHT);
+		}
+		else
+			vx = -vx;
+
+	}
+}
+
+void CKoopas::OnCollisionWithBoostKoopas(LPCOLLISIONEVENT e)
+{
+	CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
+
+	if (Koopas->GetState() == KOOPAS_STATE_BOOST && (state == KOOPAS_STATE_WALKING_LEFT || state == KOOPAS_STATE_WALKING_RIGHT)) {
+
+		this->SetState(KOOPAS_STATE_DESTROY);
+		return;
+	}
+}
+
+void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+	if (state == KOOPAS_STATE_BOOST)
+	{
+		if (brick->AniID > ID_ANI_BRICK_NULL && e->nx != 0)
+		{
+			CMario* mario = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+			switch (brick->AniID)
+			{
+			case ID_ANI_BRICK_COIN:
+			{
+				CGameObject* Ccoin = new CCoin(brick->GetX(), brick->GetY(), ID_ANI_COIN_Q);
+				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(Ccoin, brick->GetX(), brick->GetY() + 10);
+				mario->addCoin();
+			}
+			break;
+
+			case ID_ANI_BRICK_MUSHROOM:
+			{
+
+				if (mario->Getlevel() == MARIO_LEVEL_SMALL)
+				{
+					CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY());
+					((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
+				}
+				else if (mario->Getlevel() == MARIO_LEVEL_BIG)
+				{
+					CGameObject* leaf = new CLeaf(brick->GetX(), brick->GetY());
+					((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(leaf, brick->GetX(), brick->GetY() - 16);
+				}
+
+			}
+			break;
+
+			}
+			brick->AniID = ID_ANI_BRICK_NULL;
+		}
+		vx = -vx;
+	}
+	else if (e->nx != 0 && (state == KOOPAS_STATE_WALKING_LEFT || state == KOOPAS_STATE_WALKING_RIGHT) )
+	{
+		if (direction == 1)
+			this->SetState(KOOPAS_STATE_WALKING_LEFT);
+		else
+			this->SetState(KOOPAS_STATE_WALKING_RIGHT);
+		//isDeleted = true;
+		//return;
+	}
+
+}
+
+void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	vy += ay * dt;
+	vx += ax * dt;
+
+	if ((state == KOOPAS_STATE_STOP) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
+	{
+		if (direction == 1)
+			this->SetState(KOOPAS_STATE_WALKING_RIGHT);
+		else
+			this->SetState(KOOPAS_STATE_WALKING_LEFT);
+		//isDeleted = true;
+		//return;
+	}
+	if (state == KOOPAS_STATE_HELD)
+	{
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		int marioLevel = mario->Getlevel();
+
+		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT) {
+			if (mario->GetNx()==1)
+				this->SetState(KOOPAS_STATE_WALKING_RIGHT);
+			else
+				this->SetState(KOOPAS_STATE_WALKING_LEFT);
+			if (marioLevel == 2) {
+				mario->SetLevel(1);
+			}
+			else
+			{
+				mario->SetState(MARIO_STATE_DIE);
+			}
+		}
+		else if (mario->isHolding == false) {
+			this->SetState(KOOPAS_STATE_BOOST);
+		}
+		else {
+			if (mario->GetNx() > 0)
+			{
+				x = mario->GetX() + 5;
+				y = mario->GetY() - 2;
+			}
+			else {
+				x = mario->GetX() - 5;
+				y = mario->GetY() -2;
+			}
+		}
+
+	}
+
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+
+
+void CKoopas::Render()
+{
+	switch (state)
+	{
+	case KOOPAS_STATE_WALKING_RIGHT:
+		aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
+		break;
+
+	case KOOPAS_STATE_WALKING_LEFT:
+		aniID = ID_ANI_KOOPAS_WALKING_LEFT;
+		break;
+
+	case KOOPAS_STATE_BOOST:
+		aniID = ID_ANI_KOOPAS_BOOST;
+		break;
+
+	default:
+		aniID = ID_ANI_KOOPAS_STOP;
+		break;
+	}
+
+	CAnimations::GetInstance()->Get(aniID)->Render(x, y);
+	RenderBoundingBox();
+}
+
+void CKoopas::SetState(int state)
+{
+	CGameObject::SetState(state);
+	switch (state)
+	{
+	case KOOPAS_STATE_STOP:
+		die_start = GetTickCount64();
+		//y += 5;
+		vx = 0;
+		vy = 0;
+		ay = 0;
+		break;
+	case KOOPAS_STATE_WALKING_LEFT:
+		
+		direction = -1;
+		this->ay = KOOPAS_GRAVITY;
+		die_start = -1;
+		vx = -KOOPAS_WALKING_SPEED;
+		break;
+
+	case KOOPAS_STATE_WALKING_RIGHT:
+		
+		direction = 1;
+		this->ay = KOOPAS_GRAVITY;
+		die_start = -1;
+		vx = KOOPAS_WALKING_SPEED;
+		break;
+	case KOOPAS_STATE_BOOST:
+	{
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		//this->y -= 5;
+		this->ax = 0;
+		this->ay = KOOPAS_GRAVITY;
+		die_start = -1;
+		if (mario->GetNx() > 0)
+			vx = 4 * KOOPAS_WALKING_SPEED;
+		else
+			vx = -4 * KOOPAS_WALKING_SPEED;
+		vy = 0;
+	}
+	break;
+	case KOOPAS_STATE_DESTROY:
+		this->vy = -0.4f;
+		this->vx = 0;
+		this->ay = KOOPAS_GRAVITY;
+		break;
+	case KOOPAS_STATE_HELD:
+	{
+		die_start = GetTickCount64();
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		if (mario->GetNx() > 0)
+		{
+			x = mario->GetX() + 5;
+			y = mario->GetY() - 5;
+		}
+		else {
+			x = mario->GetX() - 5;
+			y = mario->GetY() - 5;
+		}
+	}
+	break;
+	}
+	CGameObject::SetState(state);
+}

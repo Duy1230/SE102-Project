@@ -33,6 +33,8 @@
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 
+#define MARIO_STATE_HOLDING_RIGHT		550
+#define MARIO_STATE_HOLDING_LEFT		551
 
 #pragma region ANIMATION_ID
 
@@ -122,18 +124,20 @@ class CMario : public CGameObject
 	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
 
 public:
+	BOOLEAN isHolding;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
-
+		isHolding = false;
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
 		untouchable_start = -1;
@@ -149,9 +153,12 @@ public:
 		return (state != MARIO_STATE_DIE); 
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() {
+		return 0;
+	}//(state != MARIO_STATE_DIE && untouchable==0); }
 
 	int Getlevel() { return level; }
+	int GetNx() { return nx; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -160,4 +167,5 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void addCoin() { coin++; }
 };

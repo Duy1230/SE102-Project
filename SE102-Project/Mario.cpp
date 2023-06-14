@@ -13,6 +13,7 @@
 #include "Flower.h"
 #include "Mushroom.h"
 #include "Leaf.h"
+#include "Koopas.h"
 
 #include "Collision.h"
 
@@ -70,6 +71,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CKoopas*>(e->obj))
+		OnCollisionWithKoopas(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -103,6 +106,63 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				}
 			}
 		}
+	}
+}
+
+void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
+{
+	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+
+
+	if (e->ny < 0)
+	{
+		if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
+		{
+			
+			koopas->SetState(KOOPAS_STATE_STOP);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+
+		else if (koopas->GetState() == KOOPAS_STATE_BOOST)
+		{
+			koopas->SetState(KOOPAS_STATE_STOP);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+
+		else {
+			koopas->SetState(KOOPAS_STATE_BOOST);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+
+	else if (e->nx != 0 && koopas->GetState() == KOOPAS_STATE_STOP)
+	{
+		if (state == MARIO_STATE_HOLDING_LEFT || state == MARIO_STATE_HOLDING_RIGHT)
+			koopas->SetState(KOOPAS_STATE_HELD);
+		else
+			koopas->SetState(KOOPAS_STATE_BOOST);
+	}
+
+	
+
+	else // hit by Goomba
+	{
+		if (untouchable == 0)
+		{
+			if (koopas->GetState() != KOOPAS_STATE_STOP)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+
 	}
 }
 
@@ -352,7 +412,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -397,7 +457,7 @@ void CMario::SetState(int state)
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
-			
+
 		}
 		break;
 
@@ -411,7 +471,7 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
 			vx = 0; vy = 0.0f;
-			y +=MARIO_SIT_HEIGHT_ADJUST;
+			y += MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
 
@@ -434,6 +494,22 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+
+	case MARIO_STATE_HOLDING_RIGHT:
+		isHolding = true;
+		if (isSitting) break;
+		maxVx = MARIO_WALKING_SPEED;
+		ax = MARIO_ACCEL_WALK_X;
+		nx = 1;
+		break;
+
+	case MARIO_STATE_HOLDING_LEFT:
+		isHolding = true;
+		if (isSitting) break;
+		maxVx = -MARIO_WALKING_SPEED;
+		ax = -MARIO_ACCEL_WALK_X;
+		nx = -1;
+		break;
 	}
 
 	CGameObject::SetState(state);
@@ -450,6 +526,17 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
 		}
+		else if (isHolding)
+		{
+			if (state == MARIO_STATE_HOLDING_LEFT)
+				left = x - MARIO_BIG_BBOX_WIDTH / 2 - 10;
+			else
+				left = x - MARIO_BIG_BBOX_WIDTH / 2 + 10;
+			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
+			right = left + MARIO_BIG_BBOX_WIDTH;
+			bottom = top + MARIO_BIG_BBOX_HEIGHT;
+
+		}
 		else 
 		{
 			left = x - MARIO_BIG_BBOX_WIDTH/2;
@@ -460,10 +547,24 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	}
 	else
 	{
-		left = x - MARIO_SMALL_BBOX_WIDTH/2;
-		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
-		right = left + MARIO_SMALL_BBOX_WIDTH;
-		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+		if (isHolding)
+		{
+			if (state == MARIO_STATE_HOLDING_LEFT)
+				left = x - MARIO_SMALL_BBOX_WIDTH / 2 - 10;
+			else
+				left = x - MARIO_SMALL_BBOX_WIDTH / 2 + 10;
+			top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
+			right = left + MARIO_SMALL_BBOX_WIDTH;
+			bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+
+		}
+		else
+		{
+			left = x - MARIO_SMALL_BBOX_WIDTH / 2;
+			top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
+			right = left + MARIO_SMALL_BBOX_WIDTH;
+			bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+		}
 	}
 }
 

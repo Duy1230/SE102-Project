@@ -63,7 +63,7 @@ void CMushroom::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMushroom::SetState(int state)

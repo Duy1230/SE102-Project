@@ -71,7 +71,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ( (state==GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
+	if ( (state==GOOMBA_STATE_DIE || state == GOOMBA_STATE_DIE_KOOPAS) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
 	{
 		isDeleted = true;
 		return;
@@ -108,6 +108,10 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
+			break;
+		case GOOMBA_STATE_DIE_KOOPAS:
+			die_start = GetTickCount64();
+			vy = -0.4f;
 			break;
 	}
 }

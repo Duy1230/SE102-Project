@@ -9,6 +9,7 @@ flower.txt
 fireball.txt
 mushroom.txt
 leaf.txt
+koopas.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -85,18 +86,19 @@ leaf.txt
 
 1	460	100	10001
 
-1	710	161	10001
+1	710	161	10002
 1	760	120	10002
 
 #FLOWER
-6	390	159
+#6	390	159
 
 #Pipe
 5 	390	162	33	48	1	53005	53005	53005
 
 #GOOMBA
 2	300	10
-
+#KOOPAS
+3	200	50
 #MARIO
 0	120	10
 
