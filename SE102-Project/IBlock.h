@@ -10,12 +10,12 @@
 
 #define IBLOCK_WIDTH 15
 #define IBLOCK_BBOX_WIDTH 15
-#define IBLOCK_BBOX_HEIGHT 15
+#define IBLOCK_BBOX_HEIGHT 30
 
 class IBlock : public CGameObject {
 public:
-	IBlock(float x, float y) : CGameObject(x, y) {};
-	
+	int type;
+	IBlock(float x, float y, int Btype) : CGameObject(x, y) { type = Btype; }
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);

@@ -42,20 +42,11 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CPlatform*>(e->obj))
-	{
-		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
-		if (plat->GetSpriteBegin() >= 54000)
-		{
-			float mario_x = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetX();
-			float mario_y = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetY();
-			CGameObject* coin = new CCoin(mario_x, mario_y, ID_ANI_COIN_Q);
-			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(coin, mario_x, mario_y);
-			return;
-		}
-	}
 	if (dynamic_cast<IBlock*>(e->obj))
 	{
+		IBlock* p = dynamic_cast<IBlock*>(e->obj);
+		if (p->type != 2 && p->type != -1)
+			return;
 		if (e->ny != 0)
 		{
 			vy = 0;
@@ -104,7 +95,7 @@ void CGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)

@@ -11,6 +11,7 @@ mushroom.txt
 leaf.txt
 koopas.txt
 iblock.txt
+fgoomba.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -76,8 +77,11 @@ iblock.txt
 5 	553	75	2	2	30	53004	53004	53004
 
 #IBLOCK
-10	535	145
-10	660	145
+10	535	145	3
+10	660	145	3
+10	760	152	11
+10	1185	150	-1
+
 
 #BRICK AND Q COIN
 
@@ -99,7 +103,11 @@ iblock.txt
 5 	390	162	33	48	1	53005	53005	53005
 
 #GOOMBA
-2	200	10
+#2	200	10
+
+#FGOOMBA
+11	1000	10
+
 #KOOPAS
 3	595	145
 #MARIO

@@ -7,6 +7,7 @@
 #include "Mushroom.h"
 #include "Leaf.h"
 #include "IBlock.h"
+#include "FGoomba.h"
 
 #include "PlayScene.h"
 #include "Game.h"
@@ -76,6 +77,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CGoomba*>(e->obj)) {
 		if(e->obj->GetState() == GOOMBA_STATE_WALKING && state == KOOPAS_STATE_BOOST)
 			e->obj->SetState(GOOMBA_STATE_DIE_KOOPAS);
+		return;
+	}
+
+	else if (dynamic_cast<FGoomba*>(e->obj)) {
+		if (e->obj->GetState() != FGOOMBA_STATE_DIE && state == KOOPAS_STATE_BOOST)
+			e->obj->SetState(FGOOMBA_STATE_DIE_KOOPAS);
 		return;
 	}
 
@@ -226,6 +233,9 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 
 void CKoopas::OnCollisionWithIBlock(LPCOLLISIONEVENT e)
 {
+	IBlock* p = dynamic_cast<IBlock*>(e->obj);
+	if (p->type != 3 && p->type != -1)
+		return;
 	if (state == KOOPAS_STATE_BOOST)
 		return;
 	else
