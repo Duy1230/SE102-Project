@@ -1,6 +1,7 @@
 #include "Goomba.h"
 #include "Platform.h"
 #include "Coin.h"
+#include "IBlock.h"
 
 #include "PlayScene.h"
 #include "Game.h"
@@ -52,6 +53,18 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(coin, mario_x, mario_y);
 			return;
 		}
+	}
+	if (dynamic_cast<IBlock*>(e->obj))
+	{
+		if (e->ny != 0)
+		{
+			vy = 0;
+		}
+		else if (e->nx != 0)
+		{
+			vx = -vx;
+		}
+		return;
 	}
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 

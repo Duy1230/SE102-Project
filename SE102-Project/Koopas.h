@@ -5,7 +5,7 @@
 #include "Game.h"
 #include "PlayScene.h"
 #include "Mario.h"
-#define KOOPAS_GRAVITY 0.002f
+#define KOOPAS_GRAVITY 0.001f
 #define KOOPAS_WALKING_SPEED 0.05f
 
 
@@ -35,7 +35,7 @@ protected:
 	int direction;
 	float ax;
 	float ay;
-	bool onSpecialBrick;
+	bool isPopingOut;
 	ULONGLONG die_start;
 	//CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -50,8 +50,9 @@ protected:
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithBoostKoopas(LPCOLLISIONEVENT e);
-	virtual void OnCollisionWithBoostPlatform(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithIBlock(LPCOLLISIONEVENT e);
 
 public:
 	CKoopas(float x, float y);

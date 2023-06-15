@@ -84,6 +84,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
+			isOnPlatform = false;
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -118,18 +119,20 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	{
 		if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
 		{
-			
+			isOnPlatform = false;
 			koopas->SetState(KOOPAS_STATE_STOP);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 
 		else if (koopas->GetState() == KOOPAS_STATE_BOOST)
 		{
+			isOnPlatform = false;
 			koopas->SetState(KOOPAS_STATE_STOP);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 
 		else {
+			isOnPlatform = false;
 			koopas->SetState(KOOPAS_STATE_BOOST);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -412,7 +415,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }

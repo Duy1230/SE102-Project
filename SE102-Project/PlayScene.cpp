@@ -11,6 +11,7 @@
 #include "Platform.h"
 #include "Flower.h"
 #include "Koopas.h"
+#include "IBlock.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -123,6 +124,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
+	case OBJECT_TYPE_IBLOCK: obj = new IBlock(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 

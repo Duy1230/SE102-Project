@@ -6,6 +6,7 @@
 #include "Coin.h"
 #include "Mushroom.h"
 #include "Leaf.h"
+#include "IBlock.h"
 
 #include "PlayScene.h"
 #include "Game.h"
@@ -15,6 +16,7 @@ CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
 	direction = 1;
+	isPopingOut = 0;
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	die_start = -1;
@@ -62,7 +64,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	
 	else if (dynamic_cast<CPlatform*>(e->obj)) {
-		OnCollisionWithBoostPlatform(e);
+		OnCollisionWithPlatform(e);
 		return;
 	}
 
@@ -72,7 +74,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	
 	else if (dynamic_cast<CGoomba*>(e->obj)) {
-		if(e->obj->GetState() == GOOMBA_STATE_WALKING)
+		if(e->obj->GetState() == GOOMBA_STATE_WALKING && state == KOOPAS_STATE_BOOST)
 			e->obj->SetState(GOOMBA_STATE_DIE_KOOPAS);
 		return;
 	}
@@ -83,6 +85,10 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		return;
 	}
 
+	else if (dynamic_cast<IBlock*>(e->obj)) {
+		OnCollisionWithIBlock(e);
+		return;
+	}
 	
 	if (!e->obj->IsBlocking()) return;
 
@@ -123,7 +129,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 }
 
-void CKoopas::OnCollisionWithBoostPlatform(LPCOLLISIONEVENT e)
+void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 {
 	CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
 	if (!e->obj->IsBlocking()) return;
@@ -163,6 +169,12 @@ void CKoopas::OnCollisionWithBoostKoopas(LPCOLLISIONEVENT e)
 void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+	if (e->ny != 0)
+	{
+		vy = 0;
+		return;
+	}
+
 	if (state == KOOPAS_STATE_BOOST)
 	{
 		if (brick->AniID > ID_ANI_BRICK_NULL && e->nx != 0)
@@ -212,13 +224,32 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 
 }
 
+void CKoopas::OnCollisionWithIBlock(LPCOLLISIONEVENT e)
+{
+	if (state == KOOPAS_STATE_BOOST)
+		return;
+	else
+	{
+		if (e->nx != 0)
+		{
+			if (direction == 1)
+				this->SetState(KOOPAS_STATE_WALKING_LEFT);
+			else
+				this->SetState(KOOPAS_STATE_WALKING_RIGHT);
+		}
+	}
+}
+
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
 
+	if (state == KOOPAS_STATE_STOP && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT * 0.8))
+		isPopingOut = 1;
 	if ((state == KOOPAS_STATE_STOP) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
 	{
+		isPopingOut = 0;
 		if (direction == 1)
 			this->SetState(KOOPAS_STATE_WALKING_RIGHT);
 		else
@@ -230,8 +261,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		int marioLevel = mario->Getlevel();
-
+		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT * 0.8)
+			isPopingOut = 1;
 		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT) {
+			isPopingOut = 0;
 			if (mario->GetNx() == 1)
 			{
 				this->x = mario->GetX() - 10;
@@ -267,7 +300,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else {
 				x = mario->GetX() - 5;
-				y = mario->GetY() -2;
+				y = mario->GetY() - 2;
 			}
 		}
 
@@ -295,13 +328,18 @@ void CKoopas::Render()
 		aniID = ID_ANI_KOOPAS_BOOST;
 		break;
 
-	default:
+	case KOOPAS_STATE_DESTROY:
 		aniID = ID_ANI_KOOPAS_STOP;
 		break;
+	default:
+		if (isPopingOut)
+			aniID = ID_ANI_KOOPAS_POP_OUT;
+		else
+			aniID = ID_ANI_KOOPAS_STOP;
 	}
 
 	CAnimations::GetInstance()->Get(aniID)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CKoopas::SetState(int state)
