@@ -282,8 +282,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 
 	e->obj->Delete();
-	this->level = MARIO_LEVEL_FOX;
-	y -= 4;
+	this->SetLevel(MARIO_LEVEL_FOX);
 	CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
 	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 }
@@ -294,8 +293,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	if (m->GetState() != MUSHROOM_STATE_INIT)
 	{
 		e->obj->Delete();
-		this->level = MARIO_LEVEL_BIG;
-		y -= 6;
+		this->SetLevel(MARIO_LEVEL_BIG);
 		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
 		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 	}
@@ -861,10 +859,17 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 void CMario::SetLevel(int l)
 {
 	// Adjust position to avoid falling off platform
-	if (this->level == MARIO_LEVEL_SMALL)
+	if (this->level == MARIO_LEVEL_SMALL && l==MARIO_LEVEL_BIG)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
+	else if (this->level == MARIO_LEVEL_SMALL && l == MARIO_LEVEL_FOX)
+	{
+		y -= (MARIO_FOX_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+	}
+	else
+		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+
 	level = l;
 }
 
