@@ -58,7 +58,11 @@ void CPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 int CPlatform::IsDirectionColliable(float nx, float ny)
 {
-	if (ny == -1 && nx == 0) return 1;
-	else if (nx != 0) return 1;
+	if (this->spriteIdBegin == 53002 || this->spriteIdBegin == 53005)
+	{
+		if (nx != 0 || ny!=0) return 1;
+	}
+	else if (ny == -1 && nx == 0) return 1;
+	//else if (nx != 0) return 1;
 	else return 0;
 }

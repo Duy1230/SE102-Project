@@ -302,9 +302,14 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->SetState(KOOPAS_STATE_WALKING_LEFT);
 			}
 				
-			if (marioLevel == 2) {
+			if (marioLevel == MARIO_LEVEL_FOX) {
 				mario->isHolding = false;
-				mario->SetLevel(1);
+				mario->SetLevel(MARIO_LEVEL_BIG);
+			}
+			else if (marioLevel == MARIO_LEVEL_BIG)
+			{
+				mario->isHolding = false;
+				mario->SetLevel(MARIO_LEVEL_SMALL);
 			}
 			else
 			{
@@ -313,22 +318,37 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else if (mario->isHolding == false) {
 			if (mario->GetNx() == 1)
-				this->x = mario->GetX() - 10;
+				this->x = mario->GetX() - 14;
 			else
-				this->x = mario->GetX() + 10;
+				this->x = mario->GetX() + 14;
 
 			this->SetState(KOOPAS_STATE_BOOST);
 		}
 		else {
-			if (mario->GetNx() > 0)
+			if (mario->Getlevel() == MARIO_LEVEL_SMALL)
 			{
-				x = mario->GetX() + 5;
-				y = mario->GetY() - 2;
+				if (mario->GetNx() > 0)
+				{
+					x = mario->GetX() + 9;
+					y = mario->GetY() - 2;
+				}
+				else {
+					x = mario->GetX() - 9;
+					y = mario->GetY() - 2;
+				}
 			}
-			else {
-				x = mario->GetX() - 5;
-				y = mario->GetY() - 2;
-			}
+			else
+			{
+				if (mario->GetNx() > 0)
+				{
+					x = mario->GetX() + 9;
+					y = mario->GetY() + 2;
+				}
+				else {
+					x = mario->GetX() - 9;
+					y = mario->GetY() + 2;
+				}
+			}		
 		}
 
 	}
