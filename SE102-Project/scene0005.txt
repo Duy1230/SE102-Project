@@ -12,6 +12,7 @@ leaf.txt
 koopas.txt
 iblock.txt
 fgoomba.txt
+point.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -97,13 +98,13 @@ fgoomba.txt
 1	760	120	10002
 
 #FLOWER
-#6	390	159
+6	390	159
 
 #Pipe
 5 	390	162	33	48	1	53005	53005	53005
 
 #GOOMBA
-#2	200	10
+2	200	10
 
 #FGOOMBA
 11	1000	10

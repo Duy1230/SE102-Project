@@ -19,6 +19,7 @@
 
 class CCoin : public CGameObject {
 public:
+	BOOLEAN created = 0;
 	ULONGLONG goUp_begin = -1;
 	int aniID;
 	CCoin(float x, float y, int aniID) : CGameObject(x, y) { 

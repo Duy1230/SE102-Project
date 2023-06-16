@@ -1,5 +1,8 @@
 #include "Coin.h"
+#include "Point.h"
 
+#include "PlayScene.h"
+#include "Game.h"
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -47,10 +50,17 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isDeleted = true;
 		return;
 	}
+	else if ((state == QCOIN_STATE_FINAL) && (GetTickCount64() - goUp_begin > QCOIN_TIMEOUT / 1.1) && created == 0)
+	{
+		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 0);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() + 10);
+		created = 1;
+	}
 	else if ((state == QCOIN_STATE_FINAL) && (GetTickCount64() - goUp_begin > QCOIN_TIMEOUT / 1.8))
 	{
 		vy = QCOIN_SPEED;
 	}
+	
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

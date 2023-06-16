@@ -15,6 +15,7 @@
 #include "Leaf.h"
 #include "Koopas.h"
 #include "FGoomba.h"
+#include "Point.h"
 
 #include "Collision.h"
 
@@ -48,7 +49,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
+		if (e->ny < 0)
+		{
+			isOnPlatform = true;
+			combo = -1;
+		}
 	}
 	else
 	if (e->nx != 0 && e->obj->IsBlocking())
@@ -90,6 +95,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			isOnPlatform = false;
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			combo += 1;
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), combo);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 		}
 	}
 	else // hit by Goomba
@@ -125,6 +133,9 @@ void CMario::OnCollisionWithFGoomba(LPCOLLISIONEVENT e)
 			isOnPlatform = false;
 			goomba->SetState(FGOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			combo += 1;
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), combo);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 		}
 		else if (goomba->GetState() == FGOOMBA_STATE_DIE)
 			return;
@@ -133,6 +144,9 @@ void CMario::OnCollisionWithFGoomba(LPCOLLISIONEVENT e)
 			isOnPlatform = false;
 			goomba->SetState(FGOOMBA_STATE_WALKING);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			combo += 1;
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), combo);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 		}
 	}
 	else // hit by Goomba
@@ -168,6 +182,9 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			isOnPlatform = false;
 			koopas->SetState(KOOPAS_STATE_STOP);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			combo += 1;
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), combo);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 		}
 
 		else if (koopas->GetState() == KOOPAS_STATE_BOOST)
@@ -175,12 +192,18 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			isOnPlatform = false;
 			koopas->SetState(KOOPAS_STATE_STOP);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			combo += 1;
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), combo);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 		}
 
 		else {
 			isOnPlatform = false;
 			koopas->SetState(KOOPAS_STATE_BOOST);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			combo += 1;
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), combo);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 10);
 		}
 	}
 
@@ -229,6 +252,8 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 
 	e->obj->Delete();
+	CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
+	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
@@ -239,7 +264,10 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 		e->obj->Delete();
 		this->level = 2;
 		y -= 6;
+		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 	}
+
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)

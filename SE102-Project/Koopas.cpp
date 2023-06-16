@@ -8,6 +8,7 @@
 #include "Leaf.h"
 #include "IBlock.h"
 #include "FGoomba.h"
+#include "Point.h"
 
 #include "PlayScene.h"
 #include "Game.h"
@@ -75,20 +76,33 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	
 	else if (dynamic_cast<CGoomba*>(e->obj)) {
-		if(e->obj->GetState() == GOOMBA_STATE_WALKING && state == KOOPAS_STATE_BOOST)
+		if (e->obj->GetState() == GOOMBA_STATE_WALKING && state == KOOPAS_STATE_BOOST)
+		{
 			e->obj->SetState(GOOMBA_STATE_DIE_KOOPAS);
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), 0);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 20);
+		}
+			
 		return;
 	}
 
 	else if (dynamic_cast<FGoomba*>(e->obj)) {
 		if (e->obj->GetState() != FGOOMBA_STATE_DIE && state == KOOPAS_STATE_BOOST)
+		{
 			e->obj->SetState(FGOOMBA_STATE_DIE_KOOPAS);
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), 0);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 20);
+		}
 		return;
 	}
 
 	else if (dynamic_cast<CFlower*>(e->obj)) {
 		if (state == KOOPAS_STATE_BOOST)
+		{
 			e->obj->Delete();
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), 0);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 20);
+		}
 		return;
 	}
 
@@ -169,6 +183,8 @@ void CKoopas::OnCollisionWithBoostKoopas(LPCOLLISIONEVENT e)
 	if (Koopas->GetState() == KOOPAS_STATE_BOOST && (state == KOOPAS_STATE_WALKING_LEFT || state == KOOPAS_STATE_WALKING_RIGHT)) {
 
 		this->SetState(KOOPAS_STATE_DESTROY);
+		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 1);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 20);
 		return;
 	}
 }
@@ -381,6 +397,7 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_BOOST:
 	{
+		isPopingOut = 0;
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		//this->y -= 5;
 		this->ax = 0;
