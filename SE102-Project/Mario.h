@@ -6,11 +6,11 @@
 
 #include "debug.h"
 
-#define MARIO_WALKING_SPEED		0.08f
-#define MARIO_RUNNING_SPEED		0.15f
+#define MARIO_WALKING_SPEED		0.06f
+#define MARIO_RUNNING_SPEED		0.12f
 
-#define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_WALK_X	0.00025f
+#define MARIO_ACCEL_RUN_X	0.00035f
 
 #define MARIO_JUMP_SPEED_Y		0.25f
 #define MARIO_JUMP_RUN_SPEED_Y	0.25f
@@ -71,6 +71,7 @@
 
 
 #define ID_ANI_MARIO_DIE 999
+#define ID_ANI_MARIO_INVINCIBLE 998
 
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
@@ -157,6 +158,9 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
+#define MARIO_UNTOUCHABLE_SPRITE_LOWERBOUND 8
+#define MARIO_UNTOUCHABLE_SPRITE_UPPERBOUND 16
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -166,6 +170,7 @@ class CMario : public CGameObject
 	int combo;
 	int level; 
 	int untouchable; 
+	int untouchable_spriteChange = 1;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
@@ -194,7 +199,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 		isHolding = false;
-		level = MARIO_LEVEL_FOX;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -216,12 +221,13 @@ public:
 
 	int Getlevel() { return level; }
 	int GetNx() { return nx; }
+	int GetUntouchable() { return untouchable; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); untouchable_spriteChange = 1; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void addCoin() { coin++; }

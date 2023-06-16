@@ -1,6 +1,6 @@
 #include "Fireball.h"
 #include "Brick.h"
-
+#include "Mario.h"
 
 void CFireBall::Render()
 {
@@ -34,6 +34,28 @@ void CFireBall::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBrick(e);
 		return;
 	}
+	
+	else if (dynamic_cast<CMario*>(e->obj)) {
+		CMario* mario = dynamic_cast<CMario*>(e->obj);
+		if (!mario->GetUntouchable())
+		{
+			if (mario->Getlevel() == MARIO_LEVEL_FOX)
+			{
+				mario->SetLevel(MARIO_LEVEL_BIG);
+				mario->StartUntouchable();
+			}
+			else if (mario->Getlevel() == MARIO_LEVEL_BIG)
+			{
+				mario->SetLevel(MARIO_LEVEL_SMALL);
+				mario->StartUntouchable();
+			}
+			else
+			{
+				mario->SetState(MARIO_STATE_DIE);
+			}
+		}
+	}
+	
 }
 
 void CFireBall::OnCollisionWithBrick(LPCOLLISIONEVENT e) {

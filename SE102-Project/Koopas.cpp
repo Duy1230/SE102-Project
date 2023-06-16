@@ -221,7 +221,7 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 					CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY());
 					((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
 				}
-				else if (mario->Getlevel() == MARIO_LEVEL_BIG)
+				else if (mario->Getlevel() >= MARIO_LEVEL_BIG)
 				{
 					CGameObject* leaf = new CLeaf(brick->GetX(), brick->GetY());
 					((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(leaf, brick->GetX(), brick->GetY() - 16);

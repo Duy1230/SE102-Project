@@ -29,8 +29,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
+		untouchable_spriteChange = 0;
 		untouchable_start = 0;
 		untouchable = 0;
+	}
+	else
+	{
+		untouchable_spriteChange++;
 	}
 
 	
@@ -113,6 +118,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				}
 				else if (level == MARIO_LEVEL_BIG)
 				{
+					isSitting = false;
 					level = MARIO_LEVEL_SMALL;
 					StartUntouchable();
 				}
@@ -168,6 +174,7 @@ void CMario::OnCollisionWithFGoomba(LPCOLLISIONEVENT e)
 				else if (level == MARIO_LEVEL_BIG)
 				{
 					level = MARIO_LEVEL_SMALL;
+					isSitting = false;
 					StartUntouchable();
 				}
 				else
@@ -248,6 +255,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 				else if (level == MARIO_LEVEL_BIG)
 				{
 					level = MARIO_LEVEL_SMALL;
+					isSitting = false;
 					StartUntouchable();
 				}
 				else
@@ -339,7 +347,7 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 {
 
-	if (untouchable == 0)
+	if (untouchable == 0 )
 	{
 		if (level == MARIO_LEVEL_FOX)
 		{
@@ -349,6 +357,7 @@ void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 		else if (level == MARIO_LEVEL_BIG)
 		{
 			level = MARIO_LEVEL_SMALL;
+			isSitting = false;
 			StartUntouchable();
 		}
 		else
@@ -371,6 +380,7 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 		else if (level == MARIO_LEVEL_BIG)
 		{
 			level = MARIO_LEVEL_SMALL;
+			isSitting = false;
 			StartUntouchable();
 		}
 		else
@@ -658,9 +668,14 @@ void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
-
 	if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
+	else if (untouchable_spriteChange > MARIO_UNTOUCHABLE_SPRITE_LOWERBOUND)
+	{
+		aniId = ID_ANI_MARIO_INVINCIBLE;
+		if (untouchable_spriteChange >= MARIO_UNTOUCHABLE_SPRITE_UPPERBOUND)
+			untouchable_spriteChange = 0;
+	}
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)

@@ -3,8 +3,8 @@
 #include "GameObject.h"
 
 #define FGOOMBA_GRAVITY 0.0005f
-#define FGOOMBA_WALKING_SPEED 0.05f
-#define FGOOMBA_JUMP_SPEED 0.1f
+#define FGOOMBA_WALKING_SPEED 0.045f
+#define FGOOMBA_JUMP_SPEED 0.07f
 
 
 #define FGOOMBA_BBOX_WIDTH 16
@@ -27,6 +27,7 @@
 #define ID_ANI_FGOOMBA_PREPARE_FLYING 18003
 #define ID_ANI_FGOOMBA_FLY 18004
 
+#define FGOOMBA_JUMPSTEP 4
 
 class FGoomba : public CGameObject
 {

@@ -54,9 +54,9 @@ void FGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 		{
 			isOnPlatform = true;
 			vx = -vx;
-			if (state == FGOOMBA_STATE_FLYING && jumpStep == 5)
+			if (state == FGOOMBA_STATE_FLYING && jumpStep == FGOOMBA_JUMPSTEP)
 			{
-				vy = -2 * FGOOMBA_JUMP_SPEED;
+				vy = -3 * FGOOMBA_JUMP_SPEED;
 				jumpStep += 1;
 				isOnPlatform = false;
 			}
@@ -82,9 +82,9 @@ void FGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0)
 	{
 		isOnPlatform = true;
-		if (state == FGOOMBA_STATE_FLYING && jumpStep == 5)
+		if (state == FGOOMBA_STATE_FLYING && jumpStep == FGOOMBA_JUMPSTEP)
 		{
-			vy = -2 * FGOOMBA_JUMP_SPEED;
+			vy = -3 * FGOOMBA_JUMP_SPEED;
 			jumpStep += 1;
 			isOnPlatform = false;
 		}
@@ -114,7 +114,7 @@ void FGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->SetState(FGOOMBA_STATE_FLYING);
 	}
-	else if (state == FGOOMBA_STATE_FLYING && jumpStep == 7)
+	else if (state == FGOOMBA_STATE_FLYING && jumpStep == FGOOMBA_JUMPSTEP + 1)
 	{
 		this->SetState(FGOOMBA_STATE_WALKING_WITH_WING);
 	}
