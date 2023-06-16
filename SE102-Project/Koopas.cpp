@@ -303,6 +303,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 				
 			if (marioLevel == 2) {
+				mario->isHolding = false;
 				mario->SetLevel(1);
 			}
 			else
