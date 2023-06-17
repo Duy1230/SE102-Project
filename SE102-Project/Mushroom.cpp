@@ -80,7 +80,7 @@ void CMushroom::SetState(int state)
 		break;
 	case MUSHROOM_STATE_MOVE:
 
-		vx = MUSHROOM_SPEED;
+		vx = -MUSHROOM_SPEED;
 		ay = MUSHROOM_GRAVITY;
 		break;
 	}

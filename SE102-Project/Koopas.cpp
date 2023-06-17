@@ -305,11 +305,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (marioLevel == MARIO_LEVEL_FOX) {
 				mario->isHolding = false;
 				mario->SetLevel(MARIO_LEVEL_BIG);
+				mario->StartUntouchable();
 			}
 			else if (marioLevel == MARIO_LEVEL_BIG)
 			{
 				mario->isHolding = false;
 				mario->SetLevel(MARIO_LEVEL_SMALL);
+				mario->StartUntouchable();
 			}
 			else
 			{
