@@ -226,15 +226,15 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 
 	else if (e->nx != 0 && koopas->GetState() == KOOPAS_STATE_STOP)
 	{
-		if (state == MARIO_STATE_HOLDING_LEFT || state == MARIO_STATE_HOLDING_RIGHT)
+		if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT)
 		{
 			koopas->SetState(KOOPAS_STATE_HELD);
 			isHolding = true;
 		}
-		else
+		else if(isHolding == false)
 		{
 			koopas->SetState(KOOPAS_STATE_BOOST);
-			isHolding = false;
+			//isHolding = false;
 		}
 			
 	}
@@ -762,6 +762,7 @@ void CMario::SetState(int state)
 		ax = 0;
 		break;
 
+	/*
 	case MARIO_STATE_HOLDING_RIGHT:
 		//isHolding = true;
 		if (isSitting) break;
@@ -777,8 +778,8 @@ void CMario::SetState(int state)
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		break;
+		*/
 	}
-
 	CGameObject::SetState(state);
 }
 
