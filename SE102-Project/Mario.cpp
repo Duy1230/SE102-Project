@@ -107,7 +107,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0)
+		if (untouchable == 0 && goomba->GetState() != FGOOMBA_STATE_DIE_KOOPAS)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
@@ -162,7 +162,7 @@ void CMario::OnCollisionWithFGoomba(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0)
+		if (untouchable == 0 && goomba->GetState() != FGOOMBA_STATE_DIE_KOOPAS)
 		{
 			if (goomba->GetState() != FGOOMBA_STATE_DIE)
 			{
@@ -290,13 +290,10 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	CMushroom* m = dynamic_cast<CMushroom*>(e->obj);
-	if (m->GetState() != MUSHROOM_STATE_INIT)
-	{
-		e->obj->Delete();
-		this->SetLevel(MARIO_LEVEL_BIG);
-		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
-		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
-	}
+	e->obj->Delete();
+	this->SetLevel(MARIO_LEVEL_BIG);
+	CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
+	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 
 }
 

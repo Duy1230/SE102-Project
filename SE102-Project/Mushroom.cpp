@@ -43,7 +43,11 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
-
+	if (dynamic_cast<CMario*>(e->obj))
+	{
+		CMario* mario = dynamic_cast<CMario*>(e->obj);
+		mario->SetLevel(MARIO_LEVEL_BIG);
+	}
 	if (e->ny != 0)
 	{
 		vy = 0;

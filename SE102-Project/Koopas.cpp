@@ -440,7 +440,7 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_HELD:
 	{
-		die_start = GetTickCount64();
+		//die_start = GetTickCount64();
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		if (mario->GetNx() > 0)
 		{
