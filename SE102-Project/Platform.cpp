@@ -44,7 +44,7 @@ void CPlatform::Render()
 	if (length>1)
 		s->Get(this->spriteIdEnd)->Draw(xx, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -58,11 +58,15 @@ void CPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 int CPlatform::IsDirectionColliable(float nx, float ny)
 {
-	if (this->spriteIdBegin == 53002 || this->spriteIdBegin == 53005)
+	if (this->spriteIdBegin < 54000 && this->spriteIdBegin != 53004)
 	{
 		if (nx != 0 || ny!=0) return 1;
 	}
-	else if (ny == -1 && nx == 0) return 1;
+	else if (this->spriteIdBegin == 53004)
+	{
+		if(ny == -1 && nx ==0)
+			return 1;
+	}
 	//else if (nx != 0) return 1;
 	else return 0;
 }
