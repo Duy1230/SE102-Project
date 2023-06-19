@@ -25,7 +25,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-
+	if (vy > 0) isOnPlatform == false;
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -506,6 +506,13 @@ int CMario::GetAniIdFox()
 			else
 				aniId = ID_ANI_MARIO_FOX_HOLD_JUMP_LEFT;
 		}
+		else if (GetTickCount64() - isAttacking < MARIO_ATTACK_TIME)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_FOX_ATTACK_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_FOX_ATTACK_LEFT;
+		}
 		else
 		{
 			if (nx >= 0)
@@ -530,17 +537,32 @@ int CMario::GetAniIdFox()
 					if (nx > 0) aniId = ID_ANI_MARIO_FOX_HOLD_IDLE_RIGHT;
 					else aniId = ID_ANI_MARIO_FOX_HOLD_IDLE_LEFT;
 				}
+				else if (GetTickCount64() - isAttacking < MARIO_ATTACK_TIME)
+				{
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_FOX_ATTACK_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_FOX_ATTACK_LEFT;
+				}
 				else
 				{
 					if (nx > 0) aniId = ID_ANI_MARIO_FOX_IDLE_RIGHT;
 					else aniId = ID_ANI_MARIO_FOX_IDLE_LEFT;
-				}		
+				}
+
 			}
 			else if (vx > 0)
 			{
 				if (isHolding)
 				{
 					aniId = ID_ANI_MARIO_FOX_HOLD_WALKING_RIGHT;
+				}
+				else if (GetTickCount64() - isAttacking < MARIO_ATTACK_TIME)
+				{
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_FOX_ATTACK_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_FOX_ATTACK_LEFT;
 				}
 				else
 				{
@@ -557,6 +579,13 @@ int CMario::GetAniIdFox()
 				if (isHolding)
 				{
 					aniId = ID_ANI_MARIO_FOX_HOLD_WALKING_LEFT;
+				}
+				else if (GetTickCount64() - isAttacking < MARIO_ATTACK_TIME)
+				{
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_FOX_ATTACK_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_FOX_ATTACK_LEFT;
 				}
 				else
 				{
@@ -771,6 +800,7 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+
 
 	/*
 	case MARIO_STATE_HOLDING_RIGHT:

@@ -10,12 +10,17 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
-
+	int level = mario->Getlevel();
+	int state = mario->GetState();
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
 		if(!mario->isHolding)
 			mario->SetState(MARIO_STATE_SIT);
+		break;
+	case DIK_A:
+		if (level == MARIO_LEVEL_FOX && state != MARIO_STATE_SIT)
+			mario->setAttacking();
 		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);

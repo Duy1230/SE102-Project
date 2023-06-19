@@ -36,6 +36,7 @@
 #define MARIO_STATE_HOLDING_RIGHT		550
 #define MARIO_STATE_HOLDING_LEFT		551
 
+
 #pragma region ANIMATION_ID
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -131,6 +132,9 @@
 
 #define ID_ANI_MARIO_FOX_HOLD_JUMP_LEFT 3030
 #define ID_ANI_MARIO_FOX_HOLD_JUMP_RIGHT 3031
+
+#define ID_ANI_MARIO_FOX_ATTACK_LEFT 3040
+#define ID_ANI_MARIO_FOX_ATTACK_RIGHT 3041
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -157,6 +161,7 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_ATTACK_TIME 250
 
 #define MARIO_UNTOUCHABLE_SPRITE_LOWERBOUND 8
 #define MARIO_UNTOUCHABLE_SPRITE_UPPERBOUND 16
@@ -172,6 +177,7 @@ class CMario : public CGameObject
 	int untouchable; 
 	int untouchable_spriteChange = 1;
 	ULONGLONG untouchable_start;
+	ULONGLONG isAttacking;
 	BOOLEAN isOnPlatform;
 	int coin; 
 
@@ -202,6 +208,7 @@ public:
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
+		isAttacking = -1;
 		isOnPlatform = false;
 		coin = 0;
 		combo = -1;
@@ -222,6 +229,7 @@ public:
 	int Getlevel() { return level; }
 	int GetNx() { return nx; }
 	int GetUntouchable() { return untouchable; }
+	void setAttacking() { isAttacking = GetTickCount64(); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
