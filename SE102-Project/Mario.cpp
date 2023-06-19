@@ -95,7 +95,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
-		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_KOOPAS)
 		{
 			isOnPlatform = false;
 			goomba->SetState(GOOMBA_STATE_DIE);
@@ -149,6 +149,8 @@ void CMario::OnCollisionWithFGoomba(LPCOLLISIONEVENT e)
 			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 		}
 		else if (goomba->GetState() == FGOOMBA_STATE_DIE)
+			return;
+		else if (goomba->GetState() == FGOOMBA_STATE_DIE_KOOPAS)
 			return;
 		else
 		{
