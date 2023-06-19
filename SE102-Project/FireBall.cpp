@@ -20,9 +20,8 @@ void CFireBall::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	y += vy * dt;
 	x += vx * dt;
-
+	y += vy * dt;
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
