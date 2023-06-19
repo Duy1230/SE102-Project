@@ -25,7 +25,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-	if (vy > 0) isOnPlatform == false;
+	if (vy > 0.05f) isOnPlatform = false;
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -305,6 +305,7 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	if (brick->AniID > ID_ANI_BRICK_NULL && e->ny > 0)
 	{
 		int animationID = (int)brick->AniID;
+		brick->isMoving = 1;
 		switch (animationID)
 		{
 		case ID_ANI_BRICK_COIN:
@@ -711,7 +712,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
@@ -868,7 +869,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		{
 			left = x - MARIO_FOX_BBOX_WIDTH / 2;
 			top = y - MARIO_FOX_BBOX_HEIGHT / 2;
-			right = left + MARIO_FOX_BBOX_WIDTH;
+			right = x + MARIO_FOX_BBOX_WIDTH / 2;
 			bottom = top + MARIO_FOX_BBOX_HEIGHT;
 		}
 	}

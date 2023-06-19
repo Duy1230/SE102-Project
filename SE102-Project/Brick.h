@@ -16,13 +16,18 @@
 #define BRICK_BBOX_WIDTH 16
 #define BRICK_BBOX_HEIGHT 16
 
+#define BRICK_DISPLACEMENT 3
+#define BRICK_TIME_DISPLACEMENT 50
 class CBrick : public CGameObject {
 public:
 	int AniID;
+	int displacement = 0;
+	int isMoving = 0;
+	ULONGLONG timeDisplace = -1;
 	CBrick(float x, float y, int aniID) : CGameObject(x, y) {
 		this->AniID = aniID;
 	}
 	void Render();
-	void Update(DWORD dt) {}
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
