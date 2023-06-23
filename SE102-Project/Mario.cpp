@@ -570,9 +570,9 @@ int CMario::GetAniIdFox()
 				{
 					if (ax < 0)
 						aniId = ID_ANI_MARIO_FOX_BRACE_RIGHT;
-					else if (ax == MARIO_ACCEL_RUN_X)
+					else if (vx == MARIO_RUNNING_SPEED)
 						aniId = ID_ANI_MARIO_FOX_RUNNING_RIGHT;
-					else if (ax == MARIO_ACCEL_WALK_X)
+					else
 						aniId = ID_ANI_MARIO_FOX_WALKING_RIGHT;
 				}
 			}
@@ -593,9 +593,9 @@ int CMario::GetAniIdFox()
 				{
 					if (ax > 0)
 						aniId = ID_ANI_MARIO_FOX_BRACE_LEFT;
-					else if (ax == -MARIO_ACCEL_RUN_X)
+					else if (vx == -MARIO_RUNNING_SPEED)
 						aniId = ID_ANI_MARIO_FOX_RUNNING_LEFT;
-					else if (ax == -MARIO_ACCEL_WALK_X)
+					else
 						aniId = ID_ANI_MARIO_FOX_WALKING_LEFT;
 				}			
 			}

@@ -153,7 +153,7 @@ void CAttack::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CAttack::SetState(int state)
