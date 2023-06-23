@@ -151,7 +151,7 @@
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
-#define MARIO_FOX_BBOX_WIDTH  15
+#define MARIO_FOX_BBOX_WIDTH  16
 #define MARIO_FOX_BBOX_HEIGHT 24
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
@@ -229,7 +229,7 @@ public:
 	int Getlevel() { return level; }
 	int GetNx() { return nx; }
 	int GetUntouchable() { return untouchable; }
-	void setAttacking() { isAttacking = GetTickCount64(); }
+	void setAttacking();
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

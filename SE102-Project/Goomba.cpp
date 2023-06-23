@@ -2,6 +2,7 @@
 #include "Platform.h"
 #include "Coin.h"
 #include "IBlock.h"
+#include "Mario.h"
 
 #include "PlayScene.h"
 #include "Game.h"
@@ -59,7 +60,11 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
-
+	if (dynamic_cast<CMario*>(e->obj))
+	{
+		if (state == GOOMBA_STATE_DIE_KOOPAS)
+			return;
+	}
 	if (e->ny != 0 )
 	{
 		vy = 0;

@@ -12,6 +12,11 @@
 #define POINT_SPEED 0.01f
 #define POINT_TIMEOUT 1000
 
+#define POINT_100 0
+#define POINT_200 1
+#define POINT_400 2
+#define POINT_800 3
+#define POINT_1000 4
 class CPoint : public CGameObject {
 	int ID_Point;
 	ULONGLONG TimeAppear;

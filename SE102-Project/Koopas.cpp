@@ -33,22 +33,6 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 	top = y - KOOPAS_BBOX_HEIGHT_STOP / 2;
 	right = left + KOOPAS_BBOX_WIDTH;
 	bottom = top + KOOPAS_BBOX_HEIGHT_STOP;
-	/*
-	if (state == KOOPAS_STATE_STOP || state == KOOPAS_STATE_BOOST)
-	{
-		left = x - KOOPAS_BBOX_WIDTH / 2;
-		top = y - KOOPAS_BBOX_HEIGHT_STOP / 2;
-		right = left + KOOPAS_BBOX_WIDTH;
-		bottom = top + KOOPAS_BBOX_HEIGHT_STOP;
-	}
-	else
-	{
-		left = x - KOOPAS_BBOX_WIDTH / 2;
-		top = y - KOOPAS_BBOX_HEIGHT / 2;
-		right = left + KOOPAS_BBOX_WIDTH;
-		bottom = top + KOOPAS_BBOX_HEIGHT;
-	}
-	*/
 }
 
 void CKoopas::OnNoCollision(DWORD dt)

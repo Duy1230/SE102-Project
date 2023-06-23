@@ -13,6 +13,7 @@ koopas.txt
 iblock.txt
 fgoomba.txt
 point.txt
+attack.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

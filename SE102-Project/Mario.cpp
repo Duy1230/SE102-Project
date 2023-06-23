@@ -16,6 +16,7 @@
 #include "Koopas.h"
 #include "FGoomba.h"
 #include "Point.h"
+#include "Attack.h"
 
 #include "Collision.h"
 
@@ -107,7 +108,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0 && goomba->GetState() != FGOOMBA_STATE_DIE_KOOPAS)
+		if (untouchable == 0 && goomba->GetState() != GOOMBA_STATE_DIE_KOOPAS)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
@@ -691,6 +692,13 @@ int CMario::GetAniIdBig()
 	return aniId;
 }
 
+void CMario::setAttacking()
+{
+	isAttacking = GetTickCount64();
+	CAttack* a = new CAttack(x, y);
+	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(a, x, y);
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -712,7 +720,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
@@ -867,10 +875,20 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		}
 		else
 		{
-			left = x - MARIO_FOX_BBOX_WIDTH / 2;
-			top = y - MARIO_FOX_BBOX_HEIGHT / 2;
-			right = x + MARIO_FOX_BBOX_WIDTH / 2;
-			bottom = top + MARIO_FOX_BBOX_HEIGHT;
+			if (nx > 0)
+			{
+				left = x - MARIO_FOX_BBOX_WIDTH / 2 + 5;
+				top = y - MARIO_FOX_BBOX_HEIGHT / 2;
+				right = x + MARIO_FOX_BBOX_WIDTH / 2;
+				bottom = top + MARIO_FOX_BBOX_HEIGHT;
+			}
+			else
+			{
+				left = x - MARIO_FOX_BBOX_WIDTH / 2;
+				top = y - MARIO_FOX_BBOX_HEIGHT / 2;
+				right = x + MARIO_FOX_BBOX_WIDTH / 2 - 5;
+				bottom = top + MARIO_FOX_BBOX_HEIGHT;
+			}
 		}
 	}
 	else
