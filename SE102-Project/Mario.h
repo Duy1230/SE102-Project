@@ -14,6 +14,7 @@
 
 #define MARIO_JUMP_SPEED_Y		0.2f
 #define MARIO_JUMP_RUN_SPEED_Y	0.2f
+#define MARIO_FLY_UP_SPEED	0.2f
 
 #define MARIO_GRAVITY			0.0004f
 
@@ -36,6 +37,7 @@
 #define MARIO_STATE_HOLDING_RIGHT		550
 #define MARIO_STATE_HOLDING_LEFT		551
 
+#define MARIO_STATE_FLYING				650
 
 #pragma region ANIMATION_ID
 
@@ -162,6 +164,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_ATTACK_TIME 230
+#define MARIO_FLY_TIME	8000
 
 #define MARIO_UNTOUCHABLE_SPRITE_LOWERBOUND 8
 #define MARIO_UNTOUCHABLE_SPRITE_UPPERBOUND 16
@@ -169,6 +172,7 @@
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
+	BOOLEAN isFlying;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -178,6 +182,7 @@ class CMario : public CGameObject
 	int untouchable_spriteChange = 1;
 	ULONGLONG untouchable_start;
 	ULONGLONG isAttacking;
+	ULONGLONG flyTime;
 	BOOLEAN isOnPlatform;
 	int coin; 
 
@@ -209,7 +214,9 @@ public:
 		untouchable = 0;
 		untouchable_start = -1;
 		isAttacking = -1;
+		flyTime = -1;
 		isOnPlatform = false;
+		isFlying = false;
 		coin = 0;
 		combo = -1;
 	}
@@ -228,8 +235,13 @@ public:
 
 	int Getlevel() { return level; }
 	int GetNx() { return nx; }
+	float GetVx() { return vx; }
+	float GetVy() { return vy; }
 	int GetUntouchable() { return untouchable; }
+	BOOLEAN IsOnPlatform() { return isOnPlatform; }
+	BOOLEAN IsFlying() { return isFlying; }
 	void setAttacking();
+	void setFlying();
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

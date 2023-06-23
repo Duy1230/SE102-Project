@@ -77,12 +77,12 @@ void CAttack::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 	CMario* mario = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
-	int timeTorchBrick;
+	float timeTorchBrick;
 
 	if (mario->GetNx() > 0)
 		timeTorchBrick = ATTACK_MOVE_TIMEOUT / 2;
 	else
-		timeTorchBrick = ATTACK_MOVE_TIMEOUT / 1.5;
+		timeTorchBrick = ATTACK_MOVE_TIMEOUT / 1.6;
 
 	if (brick->AniID > ID_ANI_BRICK_NULL && e->nx != 0 && GetTickCount64() - time_move < timeTorchBrick)
 	{

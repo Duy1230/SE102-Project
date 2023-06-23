@@ -26,7 +26,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-	if (vy > 0.05f) isOnPlatform = false;
+	if (abs(vy) > 0.05f) isOnPlatform = false;
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -39,7 +39,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_spriteChange++;
 	}
 
-	
+	if (GetTickCount64() - flyTime > MARIO_FLY_TIME || isOnPlatform)
+	{
+		isFlying = false;
+		//SetState(MARIO_STATE_IDLE);	
+	}
+
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -699,6 +704,11 @@ void CMario::setAttacking()
 	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(a, x, y);
 }
 
+void CMario::setFlying()
+{
+	vy = -MARIO_FLY_UP_SPEED;
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -810,24 +820,26 @@ void CMario::SetState(int state)
 		ax = 0;
 		break;
 
+	case MARIO_STATE_FLYING:
+		flyTime = GetTickCount64();
+		isFlying = true;
+		/*
+		case MARIO_STATE_HOLDING_RIGHT:
+			//isHolding = true;
+			if (isSitting) break;
+			maxVx = MARIO_WALKING_SPEED;
+			ax = MARIO_ACCEL_WALK_X;
+			nx = 1;
+			break;
 
-	/*
-	case MARIO_STATE_HOLDING_RIGHT:
-		//isHolding = true;
-		if (isSitting) break;
-		maxVx = MARIO_WALKING_SPEED;
-		ax = MARIO_ACCEL_WALK_X;
-		nx = 1;
-		break;
-
-	case MARIO_STATE_HOLDING_LEFT:
-		//isHolding = true;
-		if (isSitting) break;
-		maxVx = -MARIO_WALKING_SPEED;
-		ax = -MARIO_ACCEL_WALK_X;
-		nx = -1;
-		break;
-		*/
+		case MARIO_STATE_HOLDING_LEFT:
+			//isHolding = true;
+			if (isSitting) break;
+			maxVx = -MARIO_WALKING_SPEED;
+			ax = -MARIO_ACCEL_WALK_X;
+			nx = -1;
+			break;
+			*/
 	}
 	CGameObject::SetState(state);
 }
