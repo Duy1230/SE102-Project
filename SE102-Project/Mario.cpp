@@ -499,7 +499,7 @@ int CMario::GetAniIdFox()
 	int aniId = -1;
 	if (!isOnPlatform)
 	{
-		if (abs(ax) == MARIO_ACCEL_RUN_X && !isHolding)
+		if (abs(ax) == MARIO_ACCEL_RUN_X && !isHolding && !isFlying)
 		{
 			if (nx >= 0)
 				aniId = ID_ANI_MARIO_FOX_JUMP_RUN_RIGHT;
@@ -520,12 +520,29 @@ int CMario::GetAniIdFox()
 			else
 				aniId = ID_ANI_MARIO_FOX_ATTACK_LEFT;
 		}
-		else
+		else if (GetTickCount64() - isFlapping < MARIO_FLAP_TIME)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_FOX_JUMP_WALK_RIGHT;
+				aniId = ID_ANI_MARIO_FOX_FLAP_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_FOX_JUMP_WALK_LEFT;
+				aniId = ID_ANI_MARIO_FOX_FLAP_LEFT;
+		}
+		else
+		{
+			if (isFlying)
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_FOX_JUMP_RUN_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_FOX_JUMP_RUN_LEFT;
+			}
+			else
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_FOX_JUMP_WALK_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_FOX_JUMP_WALK_LEFT;
+			}
 		}
 	}
 	else
@@ -706,6 +723,7 @@ void CMario::setAttacking()
 
 void CMario::setFlying()
 {
+	isFlapping = GetTickCount64();
 	vy = -MARIO_FLY_UP_SPEED;
 }
 

@@ -14,7 +14,7 @@
 
 #define MARIO_JUMP_SPEED_Y		0.2f
 #define MARIO_JUMP_RUN_SPEED_Y	0.2f
-#define MARIO_FLY_UP_SPEED	0.2f
+#define MARIO_FLY_UP_SPEED	0.15f
 
 #define MARIO_GRAVITY			0.0004f
 
@@ -137,6 +137,9 @@
 
 #define ID_ANI_MARIO_FOX_ATTACK_LEFT 3040
 #define ID_ANI_MARIO_FOX_ATTACK_RIGHT 3041
+
+#define ID_ANI_MARIO_FOX_FLAP_LEFT 3050
+#define ID_ANI_MARIO_FOX_FLAP_RIGHT 3051
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -164,6 +167,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_ATTACK_TIME 230
+#define MARIO_FLAP_TIME 150
 #define MARIO_FLY_TIME	8000
 
 #define MARIO_UNTOUCHABLE_SPRITE_LOWERBOUND 8
@@ -182,6 +186,7 @@ class CMario : public CGameObject
 	int untouchable_spriteChange = 1;
 	ULONGLONG untouchable_start;
 	ULONGLONG isAttacking;
+	ULONGLONG isFlapping;
 	ULONGLONG flyTime;
 	BOOLEAN isOnPlatform;
 	int coin; 
@@ -214,6 +219,7 @@ public:
 		untouchable = 0;
 		untouchable_start = -1;
 		isAttacking = -1;
+		isFlapping = -1;
 		flyTime = -1;
 		isOnPlatform = false;
 		isFlying = false;
