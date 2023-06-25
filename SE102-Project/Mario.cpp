@@ -42,6 +42,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (GetTickCount64() - flyTime > MARIO_FLY_TIME || isOnPlatform)
 	{
 		isFlying = false;
+		if (!isOnPlatform)
+			slowFallingBegin = true;
 		//SetState(MARIO_STATE_IDLE);	
 	}
 
@@ -63,6 +65,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0)
 		{
 			isOnPlatform = true;
+			if (slowFallingBegin)
+				slowFallingBegin = false;
 			combo = -1;
 		}
 	}
@@ -499,7 +503,7 @@ int CMario::GetAniIdFox()
 	int aniId = -1;
 	if (!isOnPlatform)
 	{
-		if (abs(ax) == MARIO_ACCEL_RUN_X && !isHolding && !isFlying)
+		if (abs(ax) == MARIO_ACCEL_RUN_X && !isHolding && !isFlying && !slowFallingBegin)
 		{
 			if (nx >= 0)
 				aniId = ID_ANI_MARIO_FOX_JUMP_RUN_RIGHT;
@@ -527,6 +531,13 @@ int CMario::GetAniIdFox()
 			else
 				aniId = ID_ANI_MARIO_FOX_FLAP_LEFT;
 		}
+		else if (GetTickCount64() - isSlowFalling < MARIO_SLOW_FALLING_TIME)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_FOX_SLOW_FALLING_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_FOX_SLOW_FALLING_LEFT;
+		}
 		else
 		{
 			if (isFlying)
@@ -535,6 +546,13 @@ int CMario::GetAniIdFox()
 					aniId = ID_ANI_MARIO_FOX_JUMP_RUN_RIGHT;
 				else
 					aniId = ID_ANI_MARIO_FOX_JUMP_RUN_LEFT;
+			}
+			else if (slowFallingBegin)
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_FOX_SLOW_FALLING_RIGHT_IDLE;
+				else
+					aniId = ID_ANI_MARIO_FOX_SLOW_FALLING_LEFT_IDLE;
 			}
 			else
 			{
@@ -725,6 +743,13 @@ void CMario::setFlying()
 {
 	isFlapping = GetTickCount64();
 	vy = -MARIO_FLY_UP_SPEED;
+}
+
+void CMario::setSlowFalling()
+{
+	slowFallingBegin = true;
+	isSlowFalling = GetTickCount64();
+	vy = 0;
 }
 
 void CMario::Render()
