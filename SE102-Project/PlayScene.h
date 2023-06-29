@@ -34,6 +34,7 @@ public:
 	virtual void Unload();
 	//NEW
 	virtual void AddObject(CGameObject* obj, float x, float y);
+	vector<LPGAMEOBJECT> getObjects() { return objects; }
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 

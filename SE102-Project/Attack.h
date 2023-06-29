@@ -34,6 +34,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithBrickButton(LPCOLLISIONEVENT e);
 
 public:
 	CAttack(float x, float y);

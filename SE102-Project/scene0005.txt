@@ -14,8 +14,9 @@ iblock.txt
 fgoomba.txt
 point.txt
 attack.txt
-button.txt
 
+button.txt
+brick-button.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -89,6 +90,8 @@ button.txt
 
 
 #BRICK AND Q COIN
+15	170	130	22000	2
+15	185	130	22000	2
 
 1	200	130	10001
 1	215	130	10001

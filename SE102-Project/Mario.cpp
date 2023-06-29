@@ -18,6 +18,7 @@
 #include "Point.h"
 #include "Attack.h"
 #include "Button.h"
+#include "BrickButton.h"
 
 #include "Collision.h"
 
@@ -99,6 +100,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFGoomba(e);
 	else if (dynamic_cast<CButton*>(e->obj))
 		OnCollisionWithButton(e);
+	else if (dynamic_cast<CBrickButton*>(e->obj))
+		OnCollisionWithBrickButton(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -305,11 +308,13 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	CMushroom* m = dynamic_cast<CMushroom*>(e->obj);
-	e->obj->Delete();
-	this->SetLevel(MARIO_LEVEL_BIG);
-	CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
-	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
-
+	if (m->GetState() == MUSHROOM_STATE_INIT)
+	{
+		e->obj->Delete();
+		this->SetLevel(MARIO_LEVEL_BIG);
+		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -411,6 +416,16 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 {
 	CButton* b = dynamic_cast<CButton*>(e->obj);
 	if (e->ny < 0 && b->GetState() != BUTTON_STATE_PRESSED) b->SetState(BUTTON_STATE_PRESSED);
+}
+
+void CMario::OnCollisionWithBrickButton(LPCOLLISIONEVENT e)
+{
+	CBrickButton* b = dynamic_cast<CBrickButton*>(e->obj);
+	if (b->AniID == ID_ANI_BRICK_BUTTON_COIN)
+	{
+		b->Delete();
+		coin++;
+	}
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)

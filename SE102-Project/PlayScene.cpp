@@ -13,6 +13,7 @@
 #include "Koopas.h"
 #include "IBlock.h"
 #include "FGoomba.h"
+#include "BrickButton.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -127,6 +128,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
 	case OBJECT_TYPE_IBLOCK: obj = new IBlock(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_FGOOMBA: obj = new FGoomba(x, y); break;
+	case OBJECT_TYPE_BRICK_BUTTON: obj = new CBrickButton(x, y, (int)atof(tokens[3].c_str()), (int)atof(tokens[4].c_str())); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -175,6 +177,7 @@ void CPlayScene::AddObject(CGameObject* obj, float x, float y)
 
 	objects.push_back(obj);
 }
+
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {

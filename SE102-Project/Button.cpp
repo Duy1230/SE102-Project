@@ -1,7 +1,8 @@
 #include "Button.h"
+#include "BrickButton.h"
 
 #include "PlayScene.h"
-
+#include "GameObject.h"
 
 CButton::CButton(float x, float y, int ID):CGameObject(x, y)
 {
@@ -40,6 +41,21 @@ void CButton::Render()
 	//RenderBoundingBox();
 }
 
+void CButton::changeBrickButton(int ID)
+{
+	vector<LPGAMEOBJECT> objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->getObjects();
+	for (size_t i = 1; i < objects.size(); i++)
+	{
+		if (dynamic_cast<CBrickButton*>(objects[i]))
+		{
+			CBrickButton* b = dynamic_cast<CBrickButton*>(objects[i]);
+			if(b->getID() == id)
+				b->ChangeState(ID);
+		}
+
+	}
+}
+
 void CButton::SetState(int state)
 {
 	CGameObject::SetState(state);
@@ -49,6 +65,7 @@ void CButton::SetState(int state)
 		break;
 	case BUTTON_STATE_PRESSED:
 		y += 6;
+		changeBrickButton(ID_ANI_BRICK_BUTTON_COIN);
 		break;
 	}
 }

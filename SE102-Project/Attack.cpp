@@ -10,6 +10,8 @@
 #include "Mushroom.h"
 #include "Leaf.h"
 #include "Point.h"
+#include "BrickButton.h"
+#include "Button.h"
 
 #include "PlayScene.h"
 #include "Game.h"
@@ -63,6 +65,8 @@ void CAttack::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
+	else if (dynamic_cast<CBrickButton*>(e->obj))
+		OnCollisionWithBrickButton(e);
 
 }
 
@@ -71,6 +75,13 @@ void CAttack::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 	this->SetState(ATTACK_STATE_STOP);
 	CGameObject* point = new CPoint(this->GetX(), this->GetY(), POINT_100);
 	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, e->obj->GetX(), e->obj->GetY() - 30);
+}
+
+void CAttack::OnCollisionWithBrickButton(LPCOLLISIONEVENT e)
+{
+	CBrickButton* brick = dynamic_cast<CBrickButton*>(e->obj);
+	if (brick->AniID == ID_ANI_BRICK_BUTTON_GLASSBRICK)
+		brick->Delete();
 }
 
 void CAttack::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -113,6 +124,11 @@ void CAttack::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(leaf, brick->GetX(), brick->GetY() - 16);
 			}
 
+		}
+		case ID_ANI_BRICK_BUTTON:
+		{
+			CGameObject* button = new CButton(brick->GetX(), brick->GetY(), brick->getID());
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(button, brick->GetX(), brick->GetY() - 16);
 		}
 		break;
 

@@ -29,4 +29,5 @@ protected:
 public:
 	CButton(float x, float y, int id);
 	virtual void SetState(int state);
+	virtual void changeBrickButton(int ID);
 };
