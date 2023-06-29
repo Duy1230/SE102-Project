@@ -17,6 +17,7 @@
 #include "FGoomba.h"
 #include "Point.h"
 #include "Attack.h"
+#include "Button.h"
 
 #include "Collision.h"
 
@@ -96,6 +97,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<FGoomba*>(e->obj))
 		OnCollisionWithFGoomba(e);
+	else if (dynamic_cast<CButton*>(e->obj))
+		OnCollisionWithButton(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -315,7 +318,8 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	if (brick->AniID > ID_ANI_BRICK_NULL && e->ny > 0)
 	{
 		int animationID = (int)brick->AniID;
-		brick->isMoving = 1;
+		if(brick->AniID != ID_ANI_BRICK_BUTTON)
+			brick->isMoving = 1;
 		switch (animationID)
 		{
 		case ID_ANI_BRICK_COIN:
@@ -344,6 +348,11 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		}
 		break;
 
+		case ID_ANI_BRICK_BUTTON:
+		{
+			CGameObject* button = new CButton(brick->GetX(), brick->GetY(), brick->getID());
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(button, brick->GetX(), brick->GetY() - 16);
+		}
 		}
 		brick->AniID = ID_ANI_BRICK_NULL;
 		
@@ -396,6 +405,12 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 			SetState(MARIO_STATE_DIE);
 		}
 	}
+}
+
+void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
+{
+	CButton* b = dynamic_cast<CButton*>(e->obj);
+	if (e->ny < 0 && b->GetState() != BUTTON_STATE_PRESSED) b->SetState(BUTTON_STATE_PRESSED);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)

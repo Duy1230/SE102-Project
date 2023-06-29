@@ -1,0 +1,10 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+77000	311	979	328	996	70
+77001	311	991	328	996	70
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#default
+21000	77000	1000
+21001	77001	1000
