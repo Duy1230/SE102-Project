@@ -10,6 +10,9 @@
 #include "FGoomba.h"
 #include "Point.h"
 
+#include "Button.h"
+#include "BrickButton.h"
+
 #include "PlayScene.h"
 #include "Game.h"
 
@@ -93,6 +96,15 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<IBlock*>(e->obj)) {
 		OnCollisionWithIBlock(e);
 		return;
+	}
+
+	else if (dynamic_cast<CBrickButton*>(e->obj))
+	{
+		CBrickButton* b = dynamic_cast<CBrickButton*>(e->obj);
+		if (state == KOOPAS_STATE_BOOST && b->AniID != ID_ANI_BRICK_BUTTON_COIN)
+		{
+			e->obj->Delete();
+		}
 	}
 	
 	if (!e->obj->IsBlocking()) return;
@@ -211,6 +223,13 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 					((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(leaf, brick->GetX(), brick->GetY() - 16);
 				}
 
+			}
+			break;
+
+			case ID_ANI_BRICK_BUTTON:
+			{
+				CGameObject* button = new CButton(brick->GetX(), brick->GetY(), brick->getID());
+				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(button, brick->GetX(), brick->GetY() - 16);
 			}
 			break;
 
