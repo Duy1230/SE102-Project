@@ -7,10 +7,10 @@
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.09f
-#define MARIO_RUNNING_SPEED		0.16f
+#define MARIO_RUNNING_SPEED		0.15f
 
 #define MARIO_ACCEL_WALK_X	0.00025f
-#define MARIO_ACCEL_RUN_X	0.00005f
+#define MARIO_ACCEL_RUN_X	0.00003f
 
 #define MARIO_JUMP_SPEED_Y		0.2f
 #define MARIO_JUMP_RUN_SPEED_Y	0.2f
@@ -226,7 +226,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 		isHolding = false;
-		level = MARIO_LEVEL_FOX;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isAttacking = -1;
