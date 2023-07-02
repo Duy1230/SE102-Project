@@ -73,9 +73,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 	}
 	else
-	if (e->nx != 0 && e->obj->IsBlocking())
 	{
-		vx = 0;
+		if (e->nx != 0 && e->obj->IsBlocking())
+		{
+			vx = 0;
+		}
 	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
