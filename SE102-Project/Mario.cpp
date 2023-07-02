@@ -75,7 +75,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	isOnPipe = false;
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
-		//if(!dynamic_cast<CPipe*>(e->obj))
+		//if(!dynamic_cast<CPipe*>(e->obj) && (state != MARIO_STATE_DOWN || state != MARIO_STATE_UP))
 		vy = 0;
 		if (e->ny < 0)
 		{
@@ -456,9 +456,13 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
 		if (e->ny > 0 && isKeyDown)
 		{
 			this->SetState(MARIO_STATE_UP);
+			b->setState(PIPE_STATE_NO_BLOCK);
 		}
 		else if (e->ny < 0 && isKeyDown)
+		{
 			this->SetState(MARIO_STATE_DOWN);
+			b->setState(PIPE_STATE_NO_BLOCK);
+		}
 	}
 		
 }

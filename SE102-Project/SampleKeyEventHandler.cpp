@@ -12,7 +12,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 	int level = mario->Getlevel();
 	int state = mario->GetState();
-	if (!mario->tunneling)
+	if (1)//!mario->tunneling)
 	{
 		switch (KeyCode)
 		{
@@ -116,6 +116,8 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 			else
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
+		else if (game->IsKeyDown(DIK_DOWN))
+			mario->isKeyDown = true;
 		else
 		{
 			mario->SetState(MARIO_STATE_IDLE);

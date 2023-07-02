@@ -23,12 +23,7 @@ pipe.txt
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
-#PORTAL
-#null portal
-50	-100	-100	-86	180	1	-100	-100
-#active portal
-50	200	100	216	116	1	-650	160
-50	-550	160	-540	170	1	20	160
+
 
 #COIN
 #4	100	120	11001
@@ -109,6 +104,13 @@ pipe.txt
 
 1	710	161	10002
 1	760	120	10001
+
+#PORTAL
+#null portal
+50	-100	-100	-86	180	1	-100	-100
+#active portal
+50	100	185	116	190	1	-650	100
+50	-550	160	-540	170	1	20	160
 
 #FLOWER
 6	390	159

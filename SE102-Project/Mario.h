@@ -183,7 +183,7 @@
 #define MARIO_ATTACK_TIME 230
 #define MARIO_FLAP_TIME 200
 #define MARIO_SLOW_FALLING_TIME 150
-#define MARIO_TUNNELING_TIME 1000
+#define MARIO_TUNNELING_TIME 5000
 
 #define MARIO_UNTOUCHABLE_SPRITE_LOWERBOUND 8
 #define MARIO_UNTOUCHABLE_SPRITE_UPPERBOUND 16
@@ -263,7 +263,7 @@ public:
 
 	int IsCollidable()
 	{ 
-		if (state == MARIO_STATE_DIE || state == MARIO_STATE_UP || state == MARIO_STATE_DOWN)
+		if (state == MARIO_STATE_DIE) //|| state == MARIO_STATE_UP || state == MARIO_STATE_DOWN)
 			return 0;
 		return 1;
 	}
