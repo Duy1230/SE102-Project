@@ -16,6 +16,7 @@ point.txt
 attack.txt
 button.txt
 brick-button.txt
+pipe.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -24,10 +25,10 @@ brick-button.txt
 
 #PORTAL
 #null portal
-50	-100	160	-86	180	1
+50	-100	-100	-86	180	1	-100	-100
 #active portal
-50	200	160	216	180	1
-
+50	200	100	216	116	1	-650	160
+50	-550	160	-540	170	1	20	160
 
 #COIN
 #4	100	120	11001
@@ -56,7 +57,7 @@ brick-button.txt
 5 	20	194	48	17	14	53001	53001	53001
 5 	676	186	15	34	1	53002	53002	53002
 5 	690	186	15	34	33	53003	53003	53003
-
+5 	-820	194	48	17	14	53001	53001	53001
 #Background
 #    	x	y	cell_w	cell_h	length	sprite1	sprite2	sprite3
 #Bushes  
@@ -112,8 +113,6 @@ brick-button.txt
 #FLOWER
 6	390	159
 
-#Pipe
-5 	390	162	33	48	1	53005	53005	53005
 
 #GOOMBA
 2	400	160
@@ -128,5 +127,7 @@ brick-button.txt
 #MARIO
 0	20	160
 
-
+#Pipe
+5 	390	162	33	48	1	53005	53005	53005
+16	100	162
 

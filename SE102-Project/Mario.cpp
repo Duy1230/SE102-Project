@@ -19,14 +19,18 @@
 #include "Attack.h"
 #include "Button.h"
 #include "BrickButton.h"
+#include "Pipe.h"
 
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	vy += ay * dt;
-	vx += ax * dt;
+	if (state != MARIO_STATE_UP && state != MARIO_STATE_DOWN)
+	{
+		vy += ay * dt;
+		vx += ax * dt;
 
+	}
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 	if (abs(vy) > 0.05f) isOnPlatform = false;
 	// reset untouchable timer if untouchable time has passed
@@ -49,7 +53,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		//SetState(MARIO_STATE_IDLE);	
 	}
 
-
+	if (GetTickCount64() - isTunnelling > MARIO_TUNNELING_TIME && tunneling)
+	{
+		SetState(MARIO_STATE_IDLE);
+		tunneling = false;
+		isKeyDown = false;
+		CGameObject* Ccoin = new CCoin(x, y, ID_ANI_COIN_Q);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(Ccoin, x, y + 10);
+	}
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -61,8 +72,10 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	isOnPipe = false;
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
+		//if(!dynamic_cast<CPipe*>(e->obj))
 		vy = 0;
 		if (e->ny < 0)
 		{
@@ -104,6 +117,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithButton(e);
 	else if (dynamic_cast<CBrickButton*>(e->obj))
 		OnCollisionWithBrickButton(e);
+	else if (dynamic_cast<CPipe*>(e->obj))
+		OnCollisionWithPipe(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -373,6 +388,7 @@ void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 
 	if (untouchable == 0 )
 	{
+		SetState(MARIO_STATE_UP);
 		if (level == MARIO_LEVEL_FOX)
 		{
 			level = MARIO_LEVEL_BIG;
@@ -430,10 +446,28 @@ void CMario::OnCollisionWithBrickButton(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
+{
+	CPipe* b = dynamic_cast<CPipe*>(e->obj);
+	if (e->ny != 0)
+		isOnPipe = true;
+	if (state != MARIO_STATE_UP && state != MARIO_STATE_DOWN)
+	{
+		if (e->ny > 0 && isKeyDown)
+		{
+			this->SetState(MARIO_STATE_UP);
+		}
+		else if (e->ny < 0 && isKeyDown)
+			this->SetState(MARIO_STATE_DOWN);
+	}
+		
+}
+
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	this->SetPosition(p->GetLx(), p->GetLy());
+	//CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
 //
@@ -796,6 +830,21 @@ void CMario::Render()
 		if (untouchable_spriteChange >= MARIO_UNTOUCHABLE_SPRITE_UPPERBOUND)
 			untouchable_spriteChange = 0;
 	}
+	else if (state == MARIO_STATE_UP || state == MARIO_STATE_DOWN)
+	{
+		switch (level)
+		{
+		case 1:
+			aniId = ID_ANI_MARIO_SMALL_UP;
+			break;
+		case 2:
+			aniId = ID_ANI_MARIO_UP;
+			break;
+		case 3:
+			aniId = ID_ANI_MARIO_FOX_UP;
+			break;
+		}
+	}
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
@@ -898,24 +947,19 @@ void CMario::SetState(int state)
 	case MARIO_STATE_FLYING:
 		flyTime = GetTickCount64();
 		isFlying = true;
-		/*
-		case MARIO_STATE_HOLDING_RIGHT:
-			//isHolding = true;
-			if (isSitting) break;
-			maxVx = MARIO_WALKING_SPEED;
-			ax = MARIO_ACCEL_WALK_X;
-			nx = 1;
-			break;
 
-		case MARIO_STATE_HOLDING_LEFT:
-			//isHolding = true;
-			if (isSitting) break;
-			maxVx = -MARIO_WALKING_SPEED;
-			ax = -MARIO_ACCEL_WALK_X;
-			nx = -1;
-			break;
-			*/
+	case MARIO_STATE_UP:
+		vy = -MARIO_TUNNEL_SPEED;
+		tunneling = true;
+		isTunnelling = GetTickCount64();
+		break;
+	case MARIO_STATE_DOWN:
+		vy = MARIO_TUNNEL_SPEED;
+		tunneling = true;
+		isTunnelling = GetTickCount64();
+		break;
 	}
+
 	CGameObject::SetState(state);
 }
 

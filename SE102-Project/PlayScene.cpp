@@ -14,6 +14,7 @@
 #include "IBlock.h"
 #include "FGoomba.h"
 #include "BrickButton.h"
+#include "Pipe.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -110,15 +111,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
+
+	//case OBJECT_TYPE_MARIO_CURRENT:
+	//	obj = new CMario(x, y);
+	//	obj = currentplayer->SetPosition(x,y);
+	//	player = (CMario*)obj;
 	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
+		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
-		
+		obj = new CMario(x, y);
+		player = (CMario*)obj;
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
@@ -129,6 +134,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_IBLOCK: obj = new IBlock(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_FGOOMBA: obj = new FGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK_BUTTON: obj = new CBrickButton(x, y, (int)atof(tokens[3].c_str()), (int)atof(tokens[4].c_str())); break;
+	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -153,7 +159,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float r = (float)atof(tokens[3].c_str());
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
+		float lx = (float)atof(tokens[6].c_str());
+		float ly = (float)atof(tokens[7].c_str());
+		obj = new CPortal(x, y, r, b, scene_id,lx,ly);
 	}
 	break;
 
@@ -165,8 +173,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// General object setup
 	obj->SetPosition(x, y);
-
-
 	objects.push_back(obj);
 }
 
@@ -276,7 +282,8 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 
-	if (cx < 0) cx = 0;
+	if (cx < 0 && cx>-500) cx = 0;
+	else if(cx <= -500) cx = -700;
 	if (cy > 0) cy = 0;
 
 	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);

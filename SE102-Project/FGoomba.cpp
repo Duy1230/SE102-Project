@@ -107,6 +107,7 @@ void FGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void FGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	float mario_x = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetX();
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -129,8 +130,11 @@ void FGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	if (abs(x - mario_x) < 250)
+	{
+		CGameObject::Update(dt, coObjects);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+	}
 }
 
 void FGoomba::Render()

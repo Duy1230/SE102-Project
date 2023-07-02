@@ -15,6 +15,7 @@
 #define MARIO_JUMP_SPEED_Y		0.2f
 #define MARIO_JUMP_RUN_SPEED_Y	0.2f
 #define MARIO_FLY_UP_SPEED	0.14f
+#define MARIO_TUNNEL_SPEED	0.03f
 
 #define MARIO_GRAVITY			0.0004f
 
@@ -38,6 +39,8 @@
 #define MARIO_STATE_HOLDING_LEFT		551
 
 #define MARIO_STATE_FLYING				650
+#define MARIO_STATE_UP					700
+#define MARIO_STATE_DOWN				701
 
 #pragma region ANIMATION_ID
 
@@ -71,7 +74,7 @@
 #define ID_ANI_MARIO_HOLD_JUMP_LEFT 1030
 #define ID_ANI_MARIO_HOLD_JUMP_RIGHT 1031
 
-
+#define ID_ANI_MARIO_UP 1040
 
 #define ID_ANI_MARIO_DIE 999
 #define ID_ANI_MARIO_INVINCIBLE 998
@@ -103,6 +106,8 @@
 
 #define ID_ANI_MARIO_SMALL_HOLD_JUMP_LEFT 1630
 #define ID_ANI_MARIO_SMALL_HOLD_JUMP_RIGHT 1631
+
+#define ID_ANI_MARIO_SMALL_UP 1700
 
 //FOX MARIO
 #define ID_ANI_MARIO_FOX_IDLE_RIGHT 2400
@@ -145,6 +150,8 @@
 #define ID_ANI_MARIO_FOX_SLOW_FALLING_RIGHT 3061
 #define ID_ANI_MARIO_FOX_SLOW_FALLING_LEFT_IDLE 3062
 #define ID_ANI_MARIO_FOX_SLOW_FALLING_RIGHT_IDLE 3063
+
+#define ID_ANI_MARIO_FOX_UP 3100
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -176,6 +183,7 @@
 #define MARIO_ATTACK_TIME 230
 #define MARIO_FLAP_TIME 200
 #define MARIO_SLOW_FALLING_TIME 150
+#define MARIO_TUNNELING_TIME 1000
 
 #define MARIO_UNTOUCHABLE_SPRITE_LOWERBOUND 8
 #define MARIO_UNTOUCHABLE_SPRITE_UPPERBOUND 16
@@ -197,6 +205,7 @@ class CMario : public CGameObject
 	ULONGLONG isAttacking;
 	ULONGLONG isFlapping;
 	ULONGLONG isSlowFalling;
+	ULONGLONG isTunnelling;
 
 	ULONGLONG flyTime;
 	BOOLEAN isOnPlatform;
@@ -214,6 +223,7 @@ class CMario : public CGameObject
 	void OnCollisionWithFGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithButton(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrickButton(LPCOLLISIONEVENT e);
+	void OnCollisionWithPipe(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -221,6 +231,9 @@ class CMario : public CGameObject
 
 public:
 	BOOLEAN isHolding;
+	BOOLEAN isKeyDown;
+	BOOLEAN tunneling;
+	BOOLEAN isOnPipe = 0;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -228,12 +241,15 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 		isHolding = false;
+		isKeyDown = false;
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isAttacking = -1;
 		isFlapping = -1;
 		isSlowFalling = -1;
+		isTunnelling = -1;
+		tunneling = false;
 		flyTime = -1;
 		isOnPlatform = false;
 		isFlying = false;
@@ -247,7 +263,9 @@ public:
 
 	int IsCollidable()
 	{ 
-		return (state != MARIO_STATE_DIE); 
+		if (state == MARIO_STATE_DIE || state == MARIO_STATE_UP || state == MARIO_STATE_DOWN)
+			return 0;
+		return 1;
 	}
 
 	int IsBlocking() {
