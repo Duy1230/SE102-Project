@@ -453,15 +453,19 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
 		isOnPipe = true;
 	if (state != MARIO_STATE_UP && state != MARIO_STATE_DOWN)
 	{
-		if (e->ny > 0 && isKeyDown)
+		float position_pipe = b->GetX();
+		if (x > position_pipe - PIPE_TUNNEL_SIZE && x < position_pipe + PIPE_TUNNEL_SIZE)
 		{
-			this->SetState(MARIO_STATE_UP);
-			b->setState(PIPE_STATE_NO_BLOCK);
-		}
-		else if (e->ny < 0 && isKeyDown)
-		{
-			this->SetState(MARIO_STATE_DOWN);
-			b->setState(PIPE_STATE_NO_BLOCK);
+			if (e->ny > 0 && isKeyDown)
+			{
+				this->SetState(MARIO_STATE_UP);
+				b->setState(PIPE_STATE_NO_BLOCK);
+			}
+			else if (e->ny < 0 && isKeyDown)
+			{
+				this->SetState(MARIO_STATE_DOWN);
+				b->setState(PIPE_STATE_NO_BLOCK);
+			}
 		}
 	}
 		
@@ -470,8 +474,8 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
-	this->SetPosition(p->GetLx(), p->GetLy());
-	//CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	//this->SetPosition(p->GetLx(), p->GetLy());
+	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
 //

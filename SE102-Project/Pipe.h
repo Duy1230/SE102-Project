@@ -17,6 +17,7 @@
 #define PIPE_STATE_NO_BLOCK 1
 
 #define PIPE_TIME_CHANGE_BACK 500
+#define PIPE_TUNNEL_SIZE 8
 class CPipe : public CGameObject {
 public:
 	int state;
