@@ -16,7 +16,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		int level = mario->Getlevel();
 		int state = mario->GetState();
-		if (1)//!mario->tunneling)
+		if (!mario->tunneling)
 		{
 			switch (KeyCode)
 			{
@@ -36,7 +36,6 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 			{
 				if (level == MARIO_LEVEL_FOX)
 				{
-					//mario->setFlying();
 					if (mario->IsFlying())
 					{
 						mario->setFlying();

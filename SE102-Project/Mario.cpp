@@ -372,6 +372,7 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 			CGameObject* button = new CButton(brick->GetX(), brick->GetY(), brick->getID());
 			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(button, brick->GetX(), brick->GetY() - 16);
 		}
+		break;
 		}
 		brick->AniID = ID_ANI_BRICK_NULL;
 		
@@ -952,6 +953,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_FLYING:
 		flyTime = GetTickCount64();
 		isFlying = true;
+		break;
 
 	case MARIO_STATE_UP:
 		vy = -MARIO_TUNNEL_SPEED;

@@ -125,6 +125,7 @@ void CAttack::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 			}
 
 		}
+		break;
 		case ID_ANI_BRICK_BUTTON:
 		{
 			CGameObject* button = new CButton(brick->GetX(), brick->GetY(), brick->getID());
