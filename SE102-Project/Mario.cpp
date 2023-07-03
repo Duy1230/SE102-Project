@@ -325,13 +325,10 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	CMushroom* m = dynamic_cast<CMushroom*>(e->obj);
-	if (m->GetState() == MUSHROOM_STATE_INIT)
-	{
-		e->obj->Delete();
-		this->SetLevel(MARIO_LEVEL_BIG);
-		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
-		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
-	}
+	e->obj->Delete();
+	this->SetLevel(MARIO_LEVEL_BIG);
+	CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
+	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -474,8 +471,8 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
-	//this->SetPosition(p->GetLx(), p->GetLy());
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	this->SetPosition(p->GetLx(), p->GetLy());
+	//CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
 //
