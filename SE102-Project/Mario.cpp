@@ -808,7 +808,7 @@ void CMario::setAttacking()
 {
 	isAttacking = GetTickCount64();
 	CAttack* a = new CAttack(x, y);
-	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(a, x, y);
+	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(a, x, y + 3);
 }
 
 void CMario::setFlying()

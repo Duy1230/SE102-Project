@@ -80,7 +80,15 @@ void CAttack::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 void CAttack::OnCollisionWithBrickButton(LPCOLLISIONEVENT e)
 {
 	CBrickButton* brick = dynamic_cast<CBrickButton*>(e->obj);
-	if (brick->AniID == ID_ANI_BRICK_BUTTON_GLASSBRICK)
+	CMario* mario = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	float timeTorchBrick;
+
+	if (mario->GetNx() > 0)
+		timeTorchBrick = ATTACK_MOVE_TIMEOUT / 2;
+	else
+		timeTorchBrick = ATTACK_MOVE_TIMEOUT / 1.6;
+
+	if (brick->AniID == ID_ANI_BRICK_BUTTON_GLASSBRICK && e->nx != 0 && GetTickCount64() - time_move < timeTorchBrick)
 		brick->Delete();
 }
 
@@ -98,7 +106,8 @@ void CAttack::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	if (brick->AniID > ID_ANI_BRICK_NULL && e->nx != 0 && GetTickCount64() - time_move < timeTorchBrick)
 	{
 		int animationID = (int)brick->AniID;
-		brick->isMoving = 1;
+		if (brick->AniID != ID_ANI_BRICK_BUTTON)
+			brick->isMoving = 1;
 		switch (animationID)
 		{
 		case ID_ANI_BRICK_COIN:

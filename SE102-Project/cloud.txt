@@ -13,6 +13,7 @@
 53004	70	50	75	55	30
 #pipe
 53005	4	27	37	76	30
+53006	2257	385	2286	416	50
 
 #NONCOLIABLE
 #background objects
@@ -22,6 +23,8 @@
 54001	2	79	131	144	30
 #hill small
 54002	25	334	90	383	30
+#hill tall
+54009	558	19	655	148	30
 #cloud1
 54003	127	0	162	27	30
 #cloud2
@@ -32,6 +35,10 @@
 54006	232	36	451	151	30
 #boxstack_3_layer
 54007	153	153	338	250	30
+#boxstack_2_layer
+54008	459	5	548	150	30
 
+#end_background
+54011	2479	2	2816	417	50
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]

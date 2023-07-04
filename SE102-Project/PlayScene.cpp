@@ -283,7 +283,8 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0 && cx>-500) cx = 0;
-	else if(cx <= -500) cx = -700;
+	else if (cx <= -500) cx = -700;
+	else if (cx > 2710) cx = 2710;
 	if (cy > 0) cy = 0;
 
 	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
