@@ -860,7 +860,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
@@ -1013,9 +1013,14 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		}
 		else
 		{
+			left = x - MARIO_FOX_BBOX_WIDTH / 2 + 3;
+			top = y - MARIO_FOX_BBOX_HEIGHT / 2;
+			right = x + MARIO_FOX_BBOX_WIDTH / 2;
+			bottom = top + MARIO_FOX_BBOX_HEIGHT;
+			/*
 			if (nx > 0)
 			{
-				left = x - MARIO_FOX_BBOX_WIDTH / 2 + 5;
+				left = x - MARIO_FOX_BBOX_WIDTH / 2 + 3;
 				top = y - MARIO_FOX_BBOX_HEIGHT / 2;
 				right = x + MARIO_FOX_BBOX_WIDTH / 2;
 				bottom = top + MARIO_FOX_BBOX_HEIGHT;
@@ -1024,9 +1029,10 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			{
 				left = x - MARIO_FOX_BBOX_WIDTH / 2;
 				top = y - MARIO_FOX_BBOX_HEIGHT / 2;
-				right = x + MARIO_FOX_BBOX_WIDTH / 2 - 5;
+				right = x + MARIO_FOX_BBOX_WIDTH / 2 - 3;
 				bottom = top + MARIO_FOX_BBOX_HEIGHT;
 			}
+			*/
 		}
 	}
 	else
