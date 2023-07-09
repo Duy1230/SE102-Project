@@ -7,8 +7,9 @@
 #include "Mario.h"
 
 
-CMushroom::CMushroom(float x, float y) :CGameObject(x, y)
+CMushroom::CMushroom(float x, float y, int Ntype) :CGameObject(x, y)
 {
+	this->type = Ntype;
 	this->SetState(MUSHROOM_STATE_INIT);
 }
 
@@ -42,11 +43,6 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CMario*>(e->obj))
-	{
-		CMario* mario = dynamic_cast<CMario*>(e->obj);
-		mario->SetLevel(MARIO_LEVEL_BIG);
-	}
 	if (!e->obj->IsBlocking()) return;
 	if (e->ny != 0)
 	{
@@ -60,13 +56,26 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CMushroom::Render()
 {
-	int aniId = ID_ANI_MUSHROOM_NULL;
-	if (state == MUSHROOM_STATE_MOVE)
+	int aniID;
+	if (type == MUSHROOM_TYPE_RED)
 	{
-		aniId = ID_ANI_MUSHROOM_APPEAR;
+		aniID = ID_ANI_MUSHROOM_NULL_RED;
+		if (state == MUSHROOM_STATE_MOVE)
+		{
+			aniID = ID_ANI_MUSHROOM_APPEAR_RED;
+		}
+	}
+	else
+	{
+		aniID = ID_ANI_MUSHROOM_NULL_GREEN;
+		if (state == MUSHROOM_STATE_MOVE)
+		{
+			aniID = ID_ANI_MUSHROOM_APPEAR_GREEN;
+		}
+
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	CAnimations::GetInstance()->Get(aniID)->Render(x, y);
 	//RenderBoundingBox();
 }
 

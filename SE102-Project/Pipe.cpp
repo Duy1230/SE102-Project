@@ -5,7 +5,7 @@
 void CPipe::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_PIPE)->Render(x, y);
+	animations->Get(aniID)->Render(x, y);
 	//RenderBoundingBox();
 }
 

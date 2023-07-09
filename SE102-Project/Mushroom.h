@@ -7,9 +7,14 @@
 #define MUSHROOM_GRAVITY 0.002f
 #define MUSHROOM_SPEED 0.05f
 
-#define ID_ANI_MUSHROOM_NULL 14000
-#define ID_ANI_MUSHROOM_APPEAR 14001
+#define MUSHROOM_TYPE_RED 0
+#define MUSHROOM_TYPE_GREEN 1
 
+#define ID_ANI_MUSHROOM_NULL_RED 14000
+#define ID_ANI_MUSHROOM_APPEAR_RED 14001
+
+#define ID_ANI_MUSHROOM_NULL_GREEN 14100
+#define ID_ANI_MUSHROOM_APPEAR_GREEN 14101
 
 #define	MUSHROOM_WIDTH 16
 #define MUSHROOM_BBOX_WIDTH 16
@@ -25,6 +30,7 @@ protected:
 	float ax;
 	float ay;
 
+	int type;
 	ULONGLONG timeAppear;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -38,6 +44,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CMushroom(float x, float y);
+	CMushroom(float x, float y, int type);
 	virtual void SetState(int state);
+	int getType() { return type; }
 };

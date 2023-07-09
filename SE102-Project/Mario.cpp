@@ -58,8 +58,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		SetState(MARIO_STATE_IDLE);
 		tunneling = false;
 		isKeyDown = false;
-		CGameObject* Ccoin = new CCoin(x, y, ID_ANI_COIN_Q);
-		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(Ccoin, x, y + 10);
+		isOnPlatform = true;
 	}
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -326,9 +325,12 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	CMushroom* m = dynamic_cast<CMushroom*>(e->obj);
 	e->obj->Delete();
-	this->SetLevel(MARIO_LEVEL_BIG);
-	CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
-	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
+	if (m->getType() == MUSHROOM_TYPE_RED)
+	{
+		this->SetLevel(MARIO_LEVEL_BIG);
+		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -348,22 +350,22 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 			coin++;
 		}
 		break;
-			
+
 		case ID_ANI_BRICK_MUSHROOM:
 		{
 			int state = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->Getlevel();
 
 			if (state == MARIO_LEVEL_SMALL)
 			{
-				CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY());
+				CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY(), MUSHROOM_TYPE_RED);
 				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
 			}
-			else if(state >= MARIO_LEVEL_BIG )
+			else if (state >= MARIO_LEVEL_BIG)
 			{
 				CGameObject* leaf = new CLeaf(brick->GetX(), brick->GetY());
 				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(leaf, brick->GetX(), brick->GetY() - 16);
 			}
-			
+
 		}
 		break;
 
@@ -373,9 +375,15 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(button, brick->GetX(), brick->GetY() - 16);
 		}
 		break;
+
+		case ID_ANI_BRICK_MUSHROOM_GREEN:
+		{
+			CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY(), MUSHROOM_TYPE_GREEN);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
+		}
+		break;
 		}
 		brick->AniID = ID_ANI_BRICK_NULL;
-		
 	}
 
 	
@@ -860,7 +868,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	DebugOutTitle(L"Coins: %d", coin);
 }
 

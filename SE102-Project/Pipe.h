@@ -7,7 +7,8 @@
 #include "Mario.h"
 #include "PlayScene.h"
 
-#define ID_ANI_PIPE 23000
+#define ID_ANI_PIPE_GREEN 23000
+#define ID_ANI_PIPE_GRAY 23001
 
 #define PIPE_WIDTH 33
 #define PIPE_BBOX_WIDTH 33
@@ -21,6 +22,7 @@
 class CPipe : public CGameObject {
 public:
 	int state;
+	int aniID;
 	ULONGLONG t;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Render();
@@ -29,7 +31,7 @@ public:
 	int IsBlocking() { 
 		return state == PIPE_STATE_BLOCK;
 	}
-	CPipe(float x, float y) : CGameObject(x, y) { state = PIPE_STATE_BLOCK; };
+	CPipe(float x, float y, int ani) : CGameObject(x, y) { state = PIPE_STATE_BLOCK; aniID = ani; };
 	void setState(int newstate)
 	{
 		state = newstate;

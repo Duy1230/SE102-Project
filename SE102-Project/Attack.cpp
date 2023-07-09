@@ -124,7 +124,7 @@ void CAttack::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 
 			if (state == MARIO_LEVEL_SMALL)
 			{
-				CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY());
+				CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY(), MUSHROOM_TYPE_RED);
 				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
 			}
 			else if (state >= MARIO_LEVEL_BIG)
@@ -141,6 +141,12 @@ void CAttack::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(button, brick->GetX(), brick->GetY() - 16);
 		}
 		break;
+
+		case ID_ANI_BRICK_MUSHROOM_GREEN:
+		{
+			CGameObject* mushroom = new CMushroom(brick->GetX(), brick->GetY(), MUSHROOM_TYPE_GREEN);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, brick->GetX(), brick->GetY() - 16);
+		}
 
 		}
 		brick->AniID = ID_ANI_BRICK_NULL;

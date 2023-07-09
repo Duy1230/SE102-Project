@@ -134,7 +134,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_IBLOCK: obj = new IBlock(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_FGOOMBA: obj = new FGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK_BUTTON: obj = new CBrickButton(x, y, (int)atof(tokens[3].c_str()), (int)atof(tokens[4].c_str())); break;
-	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y); break;
+	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -282,10 +282,24 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 
-	if (cx < 0 && cx>-500) cx = 0;
-	else if (cx <= -500) cx = -700;
-	else if (cx > 2710) cx = 2710;
-	if (cy > 0) cy = 0;
+	if (cx < 0 && cx>-500)
+	{
+		cx = 0;
+		if (cy > 10) cy = 10;
+	}
+	else if (cx <= -500)
+	{
+		cx = -700;
+		cy = 10;
+	}
+	else if (cx > 2710)
+	{
+		cx = 2710;
+		if (cy > 10) cy = 10;
+	}
+	else
+		if (cy > 10) cy = 10;
+
 
 	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
 
