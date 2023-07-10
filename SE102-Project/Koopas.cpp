@@ -17,12 +17,13 @@
 #include "Game.h"
 
 
-CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
+CKoopas::CKoopas(float x, float y, int kType) :CGameObject(x, y)
 {
-	aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
+	type = kType;
 	direction = 1;
 	isPopingOut = 0;
 	isLieUp = false;
+	isOnPlatform = false;
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	die_start = -1;
@@ -378,40 +379,82 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopas::Render()
 {
-	switch (state)
+	if (type == 0)
 	{
-	case KOOPAS_STATE_WALKING_RIGHT:
-		aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
-		break;
-
-	case KOOPAS_STATE_WALKING_LEFT:
-		aniID = ID_ANI_KOOPAS_WALKING_LEFT;
-		break;
-
-	case KOOPAS_STATE_BOOST:
-		if(!isLieUp)
-			aniID = ID_ANI_KOOPAS_BOOST;
-		else
-			aniID = ID_ANI_KOOPAS_BOOST_UP;
-		break;
-
-	case KOOPAS_STATE_DESTROY:
-		aniID = ID_ANI_KOOPAS_STOP;
-		break;
-	default:
-		if (isPopingOut)
+		switch (state)
 		{
+		case KOOPAS_STATE_WALKING_RIGHT:
+			aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
+			break;
+
+		case KOOPAS_STATE_WALKING_LEFT:
+			aniID = ID_ANI_KOOPAS_WALKING_LEFT;
+			break;
+
+		case KOOPAS_STATE_BOOST:
 			if (!isLieUp)
-				aniID = ID_ANI_KOOPAS_POP_OUT;
+				aniID = ID_ANI_KOOPAS_BOOST;
 			else
-				aniID = ID_ANI_KOOPAS_POP_OUT_UP;
+				aniID = ID_ANI_KOOPAS_BOOST_UP;
+			break;
+
+		case KOOPAS_STATE_DESTROY:
+			aniID = ID_ANI_KOOPAS_STOP;
+			break;
+		default:
+			if (isPopingOut)
+			{
+				if (!isLieUp)
+					aniID = ID_ANI_KOOPAS_POP_OUT;
+				else
+					aniID = ID_ANI_KOOPAS_POP_OUT_UP;
+			}
+			else
+			{
+				if (!isLieUp)
+					aniID = ID_ANI_KOOPAS_STOP;
+				else
+					aniID = ID_ANI_KOOPAS_STOP_UP;
+			}
 		}
-		else
+	}
+	else
+	{
+		switch (state)
 		{
+		case KOOPAS_STATE_WALKING_RIGHT:
+			aniID = ID_ANI_KOOPAS_WALKING_RIGHT_GREEN;
+			break;
+
+		case KOOPAS_STATE_WALKING_LEFT:
+			aniID = ID_ANI_KOOPAS_WALKING_LEFT_GREEN;
+			break;
+
+		case KOOPAS_STATE_BOOST:
 			if (!isLieUp)
-				aniID = ID_ANI_KOOPAS_STOP;
+				aniID = ID_ANI_KOOPAS_BOOST_GREEN;
 			else
-				aniID = ID_ANI_KOOPAS_STOP_UP;
+				aniID = ID_ANI_KOOPAS_BOOST_UP_GREEN;
+			break;
+
+		case KOOPAS_STATE_DESTROY:
+			aniID = ID_ANI_KOOPAS_STOP_GREEN;
+			break;
+		default:
+			if (isPopingOut)
+			{
+				if (!isLieUp)
+					aniID = ID_ANI_KOOPAS_POP_OUT_GREEN;
+				else
+					aniID = ID_ANI_KOOPAS_POP_OUT_UP_GREEN;
+			}
+			else
+			{
+				if (!isLieUp)
+					aniID = ID_ANI_KOOPAS_STOP_GREEN;
+				else
+					aniID = ID_ANI_KOOPAS_STOP_UP_GREEN;
+			}
 		}
 	}
 

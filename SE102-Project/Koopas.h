@@ -34,15 +34,26 @@
 #define ID_ANI_KOOPAS_POP_OUT_UP 16006
 #define ID_ANI_KOOPAS_BOOST_UP 16007
 
+#define ID_ANI_KOOPAS_WALKING_RIGHT_GREEN 16100
+#define ID_ANI_KOOPAS_WALKING_LEFT_GREEN 16101
+#define ID_ANI_KOOPAS_STOP_GREEN 16102
+#define ID_ANI_KOOPAS_POP_OUT_GREEN 16103
+#define ID_ANI_KOOPAS_BOOST_GREEN 16104
+#define ID_ANI_KOOPAS_STOP_UP_GREEN 16105
+#define ID_ANI_KOOPAS_POP_OUT_UP_GREEN 16106
+#define ID_ANI_KOOPAS_BOOST_UP_GREEN 16107
+
 class CKoopas : public CGameObject
 {
 protected:
+	int type;
 	int aniID;
 	int direction;
 	float ax;
 	float ay;
 	bool isPopingOut;
 	bool isLieUp;
+	bool isOnPlatform;
 	ULONGLONG die_start;
 	//CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -62,7 +73,7 @@ protected:
 	virtual void OnCollisionWithIBlock(LPCOLLISIONEVENT e);
 
 public:
-	CKoopas(float x, float y);
+	CKoopas(float x, float y, int kType);
 	virtual void SetState(int state);
 	virtual void LieUp();
 };
