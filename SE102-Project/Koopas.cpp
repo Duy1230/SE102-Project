@@ -22,13 +22,14 @@ CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 	aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
 	direction = 1;
 	isPopingOut = 0;
+	isLieUp = false;
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	die_start = -1;
 	SetState(KOOPAS_STATE_WALKING_RIGHT);
 }
 
-
+void CKoopas::LieUp() { this->isLieUp = true; }
 
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -154,6 +155,8 @@ void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 	if (e->ny != 0)
 	{
 		vy = 0;
+		if (state == KOOPAS_STATE_KNOCK)
+			this->SetState(KOOPAS_STATE_STOP);
 		return;
 	}
 	else if (e->nx != 0)
@@ -191,6 +194,8 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	if (e->ny != 0)
 	{
 		vy = 0;
+		if (state == KOOPAS_STATE_KNOCK)
+			this->SetState(KOOPAS_STATE_STOP);
 		return;
 	}
 
@@ -262,7 +267,7 @@ void CKoopas::OnCollisionWithIBlock(LPCOLLISIONEVENT e)
 	IBlock* p = dynamic_cast<IBlock*>(e->obj);
 	if (p->type != 3 && p->type != -1)
 		return;
-	if (state == KOOPAS_STATE_BOOST)
+	if (state == KOOPAS_STATE_BOOST || state == KOOPAS_STATE_KNOCK)
 		return;
 	else
 	{
@@ -384,7 +389,10 @@ void CKoopas::Render()
 		break;
 
 	case KOOPAS_STATE_BOOST:
-		aniID = ID_ANI_KOOPAS_BOOST;
+		if(!isLieUp)
+			aniID = ID_ANI_KOOPAS_BOOST;
+		else
+			aniID = ID_ANI_KOOPAS_BOOST_UP;
 		break;
 
 	case KOOPAS_STATE_DESTROY:
@@ -392,9 +400,19 @@ void CKoopas::Render()
 		break;
 	default:
 		if (isPopingOut)
-			aniID = ID_ANI_KOOPAS_POP_OUT;
+		{
+			if (!isLieUp)
+				aniID = ID_ANI_KOOPAS_POP_OUT;
+			else
+				aniID = ID_ANI_KOOPAS_POP_OUT_UP;
+		}
 		else
-			aniID = ID_ANI_KOOPAS_STOP;
+		{
+			if (!isLieUp)
+				aniID = ID_ANI_KOOPAS_STOP;
+			else
+				aniID = ID_ANI_KOOPAS_STOP_UP;
+		}
 	}
 
 	CAnimations::GetInstance()->Get(aniID)->Render(x, y);
@@ -414,7 +432,7 @@ void CKoopas::SetState(int state)
 		ay = 0;
 		break;
 	case KOOPAS_STATE_WALKING_LEFT:
-		
+		isLieUp = false;
 		direction = -1;
 		this->ay = KOOPAS_GRAVITY;
 		die_start = -1;
@@ -422,7 +440,7 @@ void CKoopas::SetState(int state)
 		break;
 
 	case KOOPAS_STATE_WALKING_RIGHT:
-		
+		isLieUp = false;
 		direction = 1;
 		this->ay = KOOPAS_GRAVITY;
 		die_start = -1;
@@ -461,6 +479,21 @@ void CKoopas::SetState(int state)
 			x = mario->GetX() - 5;
 			y = mario->GetY() - 5;
 		}
+	}
+		break;
+	case KOOPAS_STATE_KNOCK:
+	{
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		if (mario->GetNx() > 0)
+		{
+			vx = KOOPAS_FLY_SPEED_X;
+			vy = -KOOPAS_FLY_SPEED_Y;
+		}
+		else {
+			vx = -KOOPAS_FLY_SPEED_X;
+			vy = -KOOPAS_FLY_SPEED_Y;
+		}
+		this->ay = KOOPAS_GRAVITY;
 	}
 	break;
 	}

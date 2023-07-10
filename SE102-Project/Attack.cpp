@@ -60,8 +60,11 @@ void CAttack::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CKoopas*>(e->obj))
 	{
-		OnCollisionWithEnemy(e);
-		e->obj->SetState(KOOPAS_STATE_DESTROY);
+		CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+		this->SetState(ATTACK_STATE_STOP);
+		koopas->LieUp();
+		koopas->SetState(KOOPAS_STATE_STOP);
+		koopas->SetState(KOOPAS_STATE_KNOCK);
 	}
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
