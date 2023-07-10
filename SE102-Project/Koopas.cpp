@@ -16,8 +16,8 @@
 #include "PlayScene.h"
 #include "Game.h"
 
-
-CKoopas::CKoopas(float x, float y, int kType) :CGameObject(x, y)
+//kType is color, isFlying is state
+CKoopas::CKoopas(float x, float y, int kType, int isFlying) :CGameObject(x, y)
 {
 	type = kType;
 	direction = 1;
@@ -27,17 +27,30 @@ CKoopas::CKoopas(float x, float y, int kType) :CGameObject(x, y)
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	die_start = -1;
-	SetState(KOOPAS_STATE_WALKING_RIGHT);
+	if(isFlying == 1)
+		SetState(KOOPAS_STATE_FLY_LEFT);
+	else
+		SetState(KOOPAS_STATE_WALKING_LEFT);
 }
 
 void CKoopas::LieUp() { this->isLieUp = true; }
 
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - KOOPAS_BBOX_WIDTH / 2;
-	top = y - KOOPAS_BBOX_HEIGHT_STOP / 2;
-	right = left + KOOPAS_BBOX_WIDTH;
-	bottom = top + KOOPAS_BBOX_HEIGHT_STOP;
+	if (state == KOOPAS_STATE_FLY_LEFT || state == KOOPAS_STATE_FLY_RIGHT)
+	{
+		left = x - KOOPAS_BBOX_WIDTH / 2 -2;
+		top = y - KOOPAS_BBOX_HEIGHT_STOP / 2 - 2;
+		right = left + KOOPAS_BBOX_WIDTH + 2;
+		bottom = top + KOOPAS_BBOX_HEIGHT_STOP +2;
+	}
+	else
+	{
+		left = x - KOOPAS_BBOX_WIDTH / 2;
+		top = y - KOOPAS_BBOX_HEIGHT_STOP / 2;
+		right = left + KOOPAS_BBOX_WIDTH;
+		bottom = top + KOOPAS_BBOX_HEIGHT_STOP;
+	}
 }
 
 void CKoopas::OnNoCollision(DWORD dt)
@@ -113,6 +126,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (e->ny != 0)
 	{
+		isOnPlatform = true;
 		vy = 0;
 		return;
 	}
@@ -130,6 +144,20 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			else
 			{
 				aniID = ID_ANI_KOOPAS_WALKING_RIGHT;
+				direction = 1;
+			}
+		}
+		if ((state == KOOPAS_STATE_FLY_LEFT || state == KOOPAS_STATE_FLY_RIGHT))
+		{
+			if (direction == 1)
+			{
+				aniID = ID_ANI_KOOPAS_FLY_LEFT_GREEN;
+				direction = -1;
+			}
+
+			else
+			{
+				aniID = ID_ANI_KOOPAS_FLY_RIGHT_GREEN;
 				direction = 1;
 			}
 		}
@@ -155,6 +183,7 @@ void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 
 	if (e->ny != 0)
 	{
+		isOnPlatform = true;
 		vy = 0;
 		if (state == KOOPAS_STATE_KNOCK)
 			this->SetState(KOOPAS_STATE_STOP);
@@ -170,6 +199,13 @@ void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 			else
 				this->SetState(KOOPAS_STATE_WALKING_RIGHT);
 		}
+		else if ((state == KOOPAS_STATE_FLY_LEFT || state == KOOPAS_STATE_FLY_RIGHT))
+		{
+			if (direction == 1)
+				this->SetState(KOOPAS_STATE_FLY_LEFT);
+			else
+				this->SetState(KOOPAS_STATE_FLY_RIGHT);
+		}
 		else
 			vx = -vx;
 
@@ -180,9 +216,17 @@ void CKoopas::OnCollisionWithBoostKoopas(LPCOLLISIONEVENT e)
 {
 	CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
 
-	if (Koopas->GetState() == KOOPAS_STATE_BOOST && (state == KOOPAS_STATE_WALKING_LEFT || state == KOOPAS_STATE_WALKING_RIGHT)) {
+	if (Koopas->GetState() == KOOPAS_STATE_BOOST) {
 
 		this->SetState(KOOPAS_STATE_DESTROY);
+		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 1);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 20);
+		return;
+	}
+	if (Koopas->GetState() == KOOPAS_STATE_HELD) {
+
+		this->SetState(KOOPAS_STATE_DESTROY);
+		Koopas->SetState(KOOPAS_STATE_DESTROY);
 		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 1);
 		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 20);
 		return;
@@ -194,6 +238,7 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 	if (e->ny != 0)
 	{
+		isOnPlatform = true;
 		vy = 0;
 		if (state == KOOPAS_STATE_KNOCK)
 			this->SetState(KOOPAS_STATE_STOP);
@@ -257,10 +302,14 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 			this->SetState(KOOPAS_STATE_WALKING_LEFT);
 		else
 			this->SetState(KOOPAS_STATE_WALKING_RIGHT);
-		//isDeleted = true;
-		//return;
 	}
-
+	else if (e->nx != 0 && (state == KOOPAS_STATE_FLY_LEFT || state == KOOPAS_STATE_FLY_RIGHT))
+	{
+		if (direction == 1)
+			this->SetState(KOOPAS_STATE_FLY_LEFT);
+		else
+			this->SetState(KOOPAS_STATE_FLY_RIGHT);
+	}
 }
 
 void CKoopas::OnCollisionWithIBlock(LPCOLLISIONEVENT e)
@@ -274,19 +323,32 @@ void CKoopas::OnCollisionWithIBlock(LPCOLLISIONEVENT e)
 	{
 		if (e->nx != 0)
 		{
-			if (direction == 1)
-				this->SetState(KOOPAS_STATE_WALKING_LEFT);
-			else
-				this->SetState(KOOPAS_STATE_WALKING_RIGHT);
+			if ((state == KOOPAS_STATE_WALKING_LEFT || state == KOOPAS_STATE_WALKING_RIGHT))
+			{
+				if (direction == 1)
+					this->SetState(KOOPAS_STATE_WALKING_LEFT);
+				else
+					this->SetState(KOOPAS_STATE_WALKING_RIGHT);
+			}
+
+			else if ((state == KOOPAS_STATE_FLY_LEFT || state == KOOPAS_STATE_FLY_RIGHT))
+			{
+				if (direction == 1)
+					this->SetState(KOOPAS_STATE_FLY_LEFT);
+				else
+					this->SetState(KOOPAS_STATE_FLY_RIGHT);
+			}
 		}
 	}
 }
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	float mario_x = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetX();
 	vy += ay * dt;
 	vx += ax * dt;
-
+	if (state == KOOPAS_STATE_STOP && isOnPlatform)
+		this->ay = 0;
 	if (state == KOOPAS_STATE_STOP && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT * 0.8))
 		isPopingOut = 1;
 	if ((state == KOOPAS_STATE_STOP) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
@@ -370,9 +432,20 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 	}
+	if (state == KOOPAS_STATE_FLY_LEFT || state == KOOPAS_STATE_FLY_RIGHT)
+	{
+		if (isOnPlatform)
+		{
+			vy = -KOOPAS_FLY_SPEED;
+			isOnPlatform = false;
+		}
+	}
+	if (abs(x - mario_x) < 250)
+	{
+		CGameObject::Update(dt, coObjects);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+	}
 
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
@@ -429,6 +502,14 @@ void CKoopas::Render()
 		case KOOPAS_STATE_WALKING_LEFT:
 			aniID = ID_ANI_KOOPAS_WALKING_LEFT_GREEN;
 			break;
+		
+		case KOOPAS_STATE_FLY_RIGHT:
+			aniID = ID_ANI_KOOPAS_FLY_RIGHT_GREEN;
+			break;
+
+		case KOOPAS_STATE_FLY_LEFT:
+			aniID = ID_ANI_KOOPAS_FLY_LEFT_GREEN;
+			break;
 
 		case KOOPAS_STATE_BOOST:
 			if (!isLieUp)
@@ -472,8 +553,12 @@ void CKoopas::SetState(int state)
 		//y += 5;
 		vx = 0;
 		vy = 0;
-		ay = 0;
+		if (!isOnPlatform)
+			this->ay = KOOPAS_GRAVITY;
+		else
+			this->ay = 0;
 		break;
+
 	case KOOPAS_STATE_WALKING_LEFT:
 		isLieUp = false;
 		direction = -1;
@@ -489,6 +574,27 @@ void CKoopas::SetState(int state)
 		die_start = -1;
 		vx = KOOPAS_WALKING_SPEED;
 		break;
+
+	case KOOPAS_STATE_FLY_LEFT:
+		isLieUp = false;
+		direction = -1;
+		this->ay = KOOPAS_GRAVITY;
+		die_start = -1;
+		vx = -KOOPAS_WALKING_SPEED;
+		vy = -KOOPAS_FLY_SPEED;
+		isOnPlatform = false;
+		break;
+
+	case KOOPAS_STATE_FLY_RIGHT:
+		isLieUp = false;
+		direction = 1;
+		this->ay = KOOPAS_GRAVITY;
+		die_start = -1;
+		vx = KOOPAS_WALKING_SPEED;
+		vy = -KOOPAS_FLY_SPEED;
+		isOnPlatform = false;
+		break;
+
 	case KOOPAS_STATE_BOOST:
 	{
 		isPopingOut = 0;
@@ -498,19 +604,20 @@ void CKoopas::SetState(int state)
 		this->ay = KOOPAS_GRAVITY;
 		die_start = -1;
 		if (mario->GetNx() > 0)
-			vx = 4 * KOOPAS_WALKING_SPEED;
+			vx = 5 * KOOPAS_WALKING_SPEED;
 		else
-			vx = -4 * KOOPAS_WALKING_SPEED;
+			vx = -5 * KOOPAS_WALKING_SPEED;
 		vy = 0;
 	}
 	break;
 	case KOOPAS_STATE_DESTROY:
-		this->vy = -0.4f;
+		this->vy = -0.15f;
 		this->vx = 0;
 		this->ay = KOOPAS_GRAVITY;
 		break;
 	case KOOPAS_STATE_HELD:
 	{
+		this->ay = 0;
 		//die_start = GetTickCount64();
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		if (mario->GetNx() > 0)
@@ -523,7 +630,7 @@ void CKoopas::SetState(int state)
 			y = mario->GetY() - 5;
 		}
 	}
-		break;
+	break;
 	case KOOPAS_STATE_KNOCK:
 	{
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();

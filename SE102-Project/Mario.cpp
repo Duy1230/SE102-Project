@@ -228,7 +228,20 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 
 	if (e->ny < 0)
 	{
-		if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
+		if (koopas->GetState() == KOOPAS_STATE_FLY_LEFT || koopas->GetState() == KOOPAS_STATE_FLY_RIGHT)
+		{
+			isOnPlatform = false;
+			if(koopas->GetState() == KOOPAS_STATE_FLY_LEFT)
+				koopas->SetState(KOOPAS_STATE_WALKING_LEFT);
+			else
+				koopas->SetState(KOOPAS_STATE_WALKING_RIGHT);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			combo += 1;
+			CGameObject* point = new CPoint(this->GetX(), this->GetY(), combo);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
+		}
+
+		else if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
 		{
 			isOnPlatform = false;
 			koopas->SetState(KOOPAS_STATE_STOP);
@@ -279,7 +292,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (koopas->GetState() != KOOPAS_STATE_STOP)
+			if (koopas->GetState() != KOOPAS_STATE_STOP && koopas->GetState() != KOOPAS_STATE_DESTROY)
 			{
 				if (level == MARIO_LEVEL_FOX)
 				{
@@ -394,7 +407,6 @@ void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 
 	if (untouchable == 0 )
 	{
-		SetState(MARIO_STATE_UP);
 		if (level == MARIO_LEVEL_FOX)
 		{
 			level = MARIO_LEVEL_BIG;

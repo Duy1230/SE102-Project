@@ -5,11 +5,13 @@
 #include "Game.h"
 #include "PlayScene.h"
 #include "Mario.h"
-#define KOOPAS_GRAVITY 0.001f
-#define KOOPAS_WALKING_SPEED 0.05f
+#define KOOPAS_GRAVITY 0.0005f
+#define KOOPAS_WALKING_SPEED 0.03f
 
 #define KOOPAS_FLY_SPEED_X 0.05f
-#define KOOPAS_FLY_SPEED_Y 0.35f
+#define KOOPAS_FLY_SPEED_Y 0.2f
+
+#define KOOPAS_FLY_SPEED 0.15f
 
 #define KOOPAS_BBOX_WIDTH 17
 #define KOOPAS_BBOX_HEIGHT 26
@@ -24,6 +26,8 @@
 #define KOOPAS_STATE_DESTROY 400
 #define KOOPAS_STATE_HELD 500
 #define KOOPAS_STATE_KNOCK 600
+#define KOOPAS_STATE_FLY_RIGHT 700
+#define KOOPAS_STATE_FLY_LEFT 701
 
 #define ID_ANI_KOOPAS_WALKING_RIGHT 16000
 #define ID_ANI_KOOPAS_WALKING_LEFT 16001
@@ -42,6 +46,8 @@
 #define ID_ANI_KOOPAS_STOP_UP_GREEN 16105
 #define ID_ANI_KOOPAS_POP_OUT_UP_GREEN 16106
 #define ID_ANI_KOOPAS_BOOST_UP_GREEN 16107
+#define ID_ANI_KOOPAS_FLY_RIGHT_GREEN 16108
+#define ID_ANI_KOOPAS_FLY_LEFT_GREEN 16109
 
 class CKoopas : public CGameObject
 {
@@ -73,7 +79,7 @@ protected:
 	virtual void OnCollisionWithIBlock(LPCOLLISIONEVENT e);
 
 public:
-	CKoopas(float x, float y, int kType);
+	CKoopas(float x, float y, int kType, int isFlying);
 	virtual void SetState(int state);
 	virtual void LieUp();
 };
