@@ -23,3 +23,4 @@ height	240
 60	textures\mario_font.png
 70	textures\mario_master.png
 80	textures\mario_affect.png
+90	textures\map.png

@@ -45,8 +45,9 @@ int CFlower::findDirection() {
 	return 2 * index;
 }
 
-CFlower::CFlower(float x, float y) :CGameObject(x, y)
+CFlower::CFlower(float x, float y,int Ftype) :CGameObject(x, y)
 {
+	type = Ftype;
 	vx = 0;
 	this->InitPoints();
 	state = FLOWER_STATE_MOVEUP;
@@ -107,7 +108,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float mario_x = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetX();
 		float mario_y = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetY();
 
-		if (sqrt((mario_x - x) * (mario_x - x) + (mario_y - y) * (mario_y - y)) < 200.0f) {
+		if ((sqrt((mario_x - x) * (mario_x - x) + (mario_y - y) * (mario_y - y)) < 200.0f) && type != 2 ) {
 			InitPoints();
 			calculateDistance();
 			int directionIndex = findDirection();
@@ -135,10 +136,30 @@ void CFlower::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	if (state == FLOWER_STATE_STOP_DOWN) {
-		animations->Get(ID_ANI_FLOWER + 1)->Render(x, y);
+		switch (type)
+		{
+		case 0:
+			animations->Get(ID_ANI_FLOWER_RED + 1)->Render(x, y);
+			break;
+		case 1:
+			animations->Get(ID_ANI_FLOWER_GREEN + 1)->Render(x, y);
+			break;
+		default:
+			animations->Get(ID_ANI_FLOWER_GREEN_NO_FIREBALL)->Render(x, y);
+		}
 	}
 	else {
-		animations->Get(ID_ANI_FLOWER)->Render(x, y);
+		switch (type)
+		{
+		case 0:
+			animations->Get(ID_ANI_FLOWER_RED)->Render(x, y);
+			break;
+		case 1:
+			animations->Get(ID_ANI_FLOWER_GREEN)->Render(x, y);
+			break;
+		default:
+			animations->Get(ID_ANI_FLOWER_GREEN_NO_FIREBALL)->Render(x, y);
+		}
 	}
 	
 
