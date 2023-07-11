@@ -16,12 +16,37 @@ point.txt
 attack.txt
 button.txt
 brick-button.txt
+background.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
+#BACKGROUND
+17	150	100
+
+#NODES
+10	62	65	-1	15	15
+
+10	98	67	-1	5	5
+#node1
+10	98	35	-1	5	5
+10	130	35	-1	5	5
+#node2
+10	163	35	-1	5	5
+#node3
+10	193	35	-1	5	5
+10	225	35	-1	5	5
+
+10	225	67	-1	5	5
+#node4
+10	193	67	-1	5	5
+10	163	67	-1	5	5
+#node_spade
+10	163	99	-1	5	5
+#castle
+10	126	99	-1	5	5
 
 # BRICKS
 1	0	148	9999
@@ -54,23 +79,7 @@ brick-button.txt
 1	352	148	9999
 1	352	164	9999
 
-#COIN
-4	100	120	11001
-4	120	120	11001
-4	140	120	11001
-4	160	120	11001
 
-#Goomba
-2	300	10
-
-#Platform
-#    	x	y	cell_w	cell_h	length	sprite1	sprite2	sprite3  
-5	90	136	16	15	16	51000	51001	51002
-5	120	90	48	17	4	53001	53001	53001
-5	150	74	48	17	4	53001	53001	53001
-
-#Portal 
-#50	300	110	316	140	2
 
 # MARIO
 0	20	10

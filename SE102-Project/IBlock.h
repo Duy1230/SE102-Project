@@ -15,7 +15,14 @@
 class IBlock : public CGameObject {
 public:
 	int type;
-	IBlock(float x, float y, int Btype) : CGameObject(x, y) { type = Btype; }
+	float width;
+	float height;
+	IBlock(float x, float y, int Btype, float bwidth = 15, float bheight = 30) : CGameObject(x, y) 
+	{
+		type = Btype; 
+		width = bwidth;
+		height = bheight;
+	}
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
