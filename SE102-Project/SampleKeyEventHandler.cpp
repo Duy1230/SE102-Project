@@ -4,6 +4,7 @@
 #include "Game.h"
 
 #include "Mario.h"
+#include "MiniMario.h"
 #include "PlayScene.h"
 
 #include "AssetIDs.h"
@@ -11,6 +12,72 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	CScene* current_screen = CGame::GetInstance()->GetCurrentScene();
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+
+
+	if (current_screen->GetId() == MAP_SCREEN)
+	{
+		CMiniMario* mini = (CMiniMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		if (mini->GetState() == MINIMARIO_STATE_STOP)
+		{
+			switch (KeyCode)
+			{
+			case DIK_LEFT:
+			{
+				int node_left = mini->canMoveLeft();
+				if (node_left != -1 && mini->isMoving == false)
+				{
+					mini->SetState(MINIMARIO_STATE_MOVE_LEFT);
+					mini->SetNode(node_left);
+				}
+				break;
+			}
+			
+			case DIK_UP:
+			{
+				int node_up = mini->canMoveUp();
+				if (node_up != -1 && mini->isMoving == false)
+				{
+					mini->SetState(MINIMARIO_STATE_MOVE_UP);
+					mini->SetNode(node_up);
+				}
+				break;
+			}
+
+			case DIK_RIGHT:
+			{
+				int node_right = mini->canMoveRight();
+				if (node_right != -1 && mini->isMoving == false)
+				{
+					mini->SetState(MINIMARIO_STATE_MOVE_RIGHT);
+					mini->SetNode(node_right);
+				}
+				break;
+			}
+
+			case DIK_DOWN:
+			{
+				int node_down = mini->canMoveDown();
+				if (node_down != -1 && mini->isMoving == false)
+				{
+					mini->SetState(MINIMARIO_STATE_MOVE_DOWN);
+					mini->SetNode(node_down);
+				}
+				break;
+			}
+
+			case DIK_S:
+			{
+				if (mini->canEnter() && (mini->isMoving == false))
+				{
+					CGame::GetInstance()->InitiateSwitchScene(PLAY_SCREEN);
+				}
+				break;
+			}
+			}
+		}
+	}
+
+
 	if (current_screen->GetId() == PLAY_SCREEN)
 	{
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();

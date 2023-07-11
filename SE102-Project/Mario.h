@@ -242,7 +242,7 @@ public:
 		ay = MARIO_GRAVITY; 
 		isHolding = false;
 		isKeyDown = false;
-		level = MARIO_LEVEL_FOX;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isAttacking = -1;

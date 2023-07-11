@@ -16,6 +16,7 @@
 #include "BrickButton.h"
 #include "Pipe.h"
 #include "Background.h"
+#include "MiniMario.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -137,6 +138,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK_BUTTON: obj = new CBrickButton(x, y, (int)atof(tokens[3].c_str()), (int)atof(tokens[4].c_str())); break;
 	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_BACKGROUND: obj = new CBackground(x, y); break;
+	case OBJECT_TYPE_MINIMARIO:
+	{
+		if (player != NULL)
+		{
+			DebugOut(L"[ERROR] MARIO object was created before!\n");
+			return;
+		}
+		obj = new CMiniMario(x, y);
+		player = (CMiniMario*)obj;
+		DebugOut(L"[INFO] Player object has been created!\n");
+		break;
+	}
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -284,23 +297,31 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 
-	if (cx < 0 && cx>-500)
+	if (game->GetScreenId() == PLAY_SCREEN)
+	{
+		if (cx < 0 && cx>-500)
+		{
+			cx = 0;
+			if (cy > 10) cy = 10;
+		}
+		else if (cx <= -500)
+		{
+			cx = -700;
+			cy = 10;
+		}
+		else if (cx > 2710)
+		{
+			cx = 2710;
+			if (cy > 10) cy = 10;
+		}
+		else
+			if (cy > 10) cy = 10;
+	}
+	else if(game->GetScreenId() == MAP_SCREEN)
 	{
 		cx = 0;
-		if (cy > 10) cy = 10;
-	}
-	else if (cx <= -500)
-	{
-		cx = -700;
 		cy = 10;
 	}
-	else if (cx > 2710)
-	{
-		cx = 2710;
-		if (cy > 10) cy = 10;
-	}
-	else
-		if (cy > 10) cy = 10;
 
 
 	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);

@@ -97,6 +97,7 @@ public:
 
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }
+	int GetScreenId(){ return current_scene; }
 
 	static CGame* GetInstance();
 

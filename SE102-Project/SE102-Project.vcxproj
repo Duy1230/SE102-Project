@@ -149,6 +149,7 @@
     <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="MiniMario.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="Platform.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="IBlock.h" />
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Leaf.h" />
+    <ClInclude Include="MiniMario.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Mario.h" />
