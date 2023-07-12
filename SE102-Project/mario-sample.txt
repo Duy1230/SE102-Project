@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	2
 width	320
 height	240
 
@@ -24,3 +24,4 @@ height	240
 70	textures\mario_master.png
 80	textures\mario_affect.png
 90	textures\map.png
+100	textures\title.png

@@ -17,6 +17,7 @@
 #include "Pipe.h"
 #include "Background.h"
 #include "MiniMario.h"
+#include "ScreenController.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -137,7 +138,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FGOOMBA: obj = new FGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK_BUTTON: obj = new CBrickButton(x, y, (int)atof(tokens[3].c_str()), (int)atof(tokens[4].c_str())); break;
 	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y, (int)atof(tokens[3].c_str())); break;
-	case OBJECT_TYPE_BACKGROUND: obj = new CBackground(x, y); break;
+	case OBJECT_TYPE_BACKGROUND: obj = new CBackground(x, y, (int)atof(tokens[3].c_str())); break;
+	case OBJECT_TYPE_CONTROLLER: obj = new Controller(x, y); break;
 	case OBJECT_TYPE_MINIMARIO:
 	{
 		if (player != NULL)
@@ -317,7 +319,13 @@ void CPlayScene::Update(DWORD dt)
 		else
 			if (cy > 10) cy = 10;
 	}
-	else if(game->GetScreenId() == MAP_SCREEN)
+	else if (game->GetScreenId() == MAP_SCREEN)
+	{
+		cx = 0;
+		cy = 10;
+	}
+
+	else if (game->GetScreenId() == TITLE_SCREEN)
 	{
 		cx = 0;
 		cy = 10;

@@ -5,10 +5,10 @@
 
 #define ID_ANI_MINIMARIO 25000
 
-#define MINIMARIO_BBOX_WIDTH 5
-#define MINIMARIO_BBOX_HEIGHT 5
+#define MINIMARIO_BBOX_WIDTH 1
+#define MINIMARIO_BBOX_HEIGHT 1
 
-#define MINIMARIO_SPEED 0.08f
+#define MINIMARIO_SPEED 0.06f
 
 #define MINIMARIO_STATE_STOP -1
 #define MINIMARIO_STATE_MOVE_LEFT 0
@@ -18,9 +18,9 @@
 
 class CMiniMario : public CGameObject {
 public:
-	int level[5] = { 2, 4, 5, 8, 11 };
+	int level[8] = { 2, 4, 5, 8, 11, 14, 16, 20 };
 
-	int route[12][4] = {
+	int route[21][4] = {
 		{-1, -1, 1, -1},
 		{0, 2, -1, -1},
 		{-1, -1, 3, 1},
@@ -32,7 +32,16 @@ public:
 		{9, -1, 7, -1},
 		{-1, 4, 8, 10},
 		{11, 9,-1, -1},
-		{-1, -1, 10, -1}
+		{12, -1, 10, -1},
+		{-1, -1, 11, 13},
+		{-1, 12, -1, 14},
+		{-1, 13, 15, -1},
+		{14, -1, 16, -1},
+		{15, 17, -1, -1},
+		{18, -1, 19, 16},
+		{-1, -1, 17, -1},
+		{17, -1, 20, -1},
+		{19, -1, -1, -1}
 	};
 
 	int current_node;

@@ -137,6 +137,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="ScreenController.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="FGoomba.cpp" />
     <ClCompile Include="FireBall.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Portal.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ScreenController.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Texture.h" />
