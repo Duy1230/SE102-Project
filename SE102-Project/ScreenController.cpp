@@ -35,11 +35,19 @@ void Controller::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (GetTickCount64() - timeLine > TIME_TITLE_SCREEN_MOVE_TITLE && title_screen_timer == 1)
 		{
 			null->SetState(ID_TYPE_GAME_TITLE, STATE_TITLE_MOVE);
+			null->SetState(ID_TYPE_3, STATE_THREE_MOVE);
 			title_screen_timer++;
 		}
 		else if (GetTickCount64() - timeLine > TIME_TITLE_SCREEN_STOP_TITLE && title_screen_timer == 2)
 		{
 			null->SetState(ID_TYPE_GAME_TITLE, STATE_TITLE_STOP);
+			null->SetState(ID_TYPE_3, STATE_THREE_STOP);
+			title_screen_timer++;
+		}
+		else if (GetTickCount64() - timeLine > TIME_TITLE_SCREEN_TURN_BRIGHT && title_screen_timer == 3)
+		{
+			null->SetState(ID_TYPE_TITLE_BACKGROUND, TURN_BRIGHT);
+			null->SetState(ID_TYPE_3, TURN_FLASHY);
 			title_screen_timer++;
 		}
 

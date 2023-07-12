@@ -12,7 +12,17 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	CScene* current_screen = CGame::GetInstance()->GetCurrentScene();
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-
+	if (current_screen->GetId() == TITLE_SCREEN)
+	{
+		switch (KeyCode)
+		{
+		case DIK_S:
+		{
+			CGame::GetInstance()->InitiateSwitchScene(MAP_SCREEN);
+		}
+		break;
+		}
+	}
 
 	if (current_screen->GetId() == MAP_SCREEN)
 	{

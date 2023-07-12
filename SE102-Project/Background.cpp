@@ -36,12 +36,25 @@ void CBackground::SetAniID()
 	case ID_TYPE_TITLE_BACKGROUND:
 		aniID = ID_ANI_TITLE_BACKGROUND;
 		break;
+	
+	case ID_TYPE_TITLE_BACKGROUND_BRIGHT:
+		aniID = ID_ANI_TITLE_BACKGROUND_BRIGHT;
+		break;
 
 	case ID_TYPE_CURTAIN_BACKGROUND:
 		aniID = ID_ANI_CURTAIN_BACKGROUND;
 		break;
+
 	case ID_TYPE_GAME_TITLE:
 		aniID = ID_ANI_GAME_TITLE;
+		break;
+
+	case ID_TYPE_3:
+		aniID = ID_ANI_3;
+		break;
+
+	case ID_TYPE_3_FLASHY:
+		aniID = ID_ANI_3_FLASHY;
 		break;
 	}
 }
@@ -62,6 +75,11 @@ void CBackground::SetState(int IDtype, int state)
 			CBackground* obj = dynamic_cast<CBackground*>(objects[i]);
 			switch (obj->type)
 			{
+			case ID_TYPE_TITLE_BACKGROUND:
+				if (obj->type == IDtype)
+					obj->SetBackgroundState(state);
+				break;
+
 			case ID_TYPE_CURTAIN_BACKGROUND:
 				if(obj->type == IDtype)
 					obj->SetCurtainState(state);
@@ -71,9 +89,28 @@ void CBackground::SetState(int IDtype, int state)
 				if (obj->type == IDtype)
 					obj->SetTitleState(state);
 				break;
+
+			case ID_TYPE_3:
+				if (obj->type == IDtype)
+					obj->SetThreeState(state);
+				break;
 			}
 		}
 
+	}
+}
+
+void CBackground::SetBackgroundState(int state)
+{
+	switch (state)
+	{
+	case TURN_BLACK:
+		SetType(ID_TYPE_TITLE_BACKGROUND);
+		break;
+
+	case TURN_BRIGHT:
+		SetType(ID_TYPE_TITLE_BACKGROUND_BRIGHT);
+		break;
 	}
 }
 
@@ -98,6 +135,23 @@ void CBackground::SetTitleState(int state)
 	case STATE_TITLE_STOP:
 		vy = 0;
 		break;
+	}
+}
+
+void CBackground::SetThreeState(int state)
+{
+	switch (state)
+	{
+	case STATE_THREE_MOVE:
+		vy = THREE_SPEED_Y;
+		break;
+
+	case STATE_THREE_STOP:
+		vy = 0;
+		break;
+	case TURN_FLASHY:
+		SetType(ID_TYPE_3_FLASHY);
+		return;
 	}
 }
 
