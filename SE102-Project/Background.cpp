@@ -40,6 +40,9 @@ void CBackground::SetAniID()
 	case ID_TYPE_CURTAIN_BACKGROUND:
 		aniID = ID_ANI_CURTAIN_BACKGROUND;
 		break;
+	case ID_TYPE_GAME_TITLE:
+		aniID = ID_ANI_GAME_TITLE;
+		break;
 	}
 }
 
@@ -60,7 +63,13 @@ void CBackground::SetState(int IDtype, int state)
 			switch (obj->type)
 			{
 			case ID_TYPE_CURTAIN_BACKGROUND:
-				obj->SetCurtainState(state);
+				if(obj->type == IDtype)
+					obj->SetCurtainState(state);
+				break;
+
+			case ID_TYPE_GAME_TITLE:
+				if (obj->type == IDtype)
+					obj->SetTitleState(state);
 				break;
 			}
 		}
@@ -74,6 +83,20 @@ void CBackground::SetCurtainState(int state)
 	{
 	case STATE_CURTAIN_MOVE:
 		vy = -CURTAIN_SPEED_Y;
+		break;
+	}
+}
+
+void CBackground::SetTitleState(int state)
+{
+	switch (state)
+	{
+	case STATE_TITLE_MOVE:
+		vy = TITLE_SPEED_Y;
+		break;
+
+	case STATE_TITLE_STOP:
+		vy = 0;
 		break;
 	}
 }
