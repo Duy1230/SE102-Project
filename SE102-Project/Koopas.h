@@ -11,6 +11,8 @@
 #define KOOPAS_FLY_SPEED_X 0.05f
 #define KOOPAS_FLY_SPEED_Y 0.2f
 
+#define KOOPAS_MAX_SPEED 0.2f
+
 #define KOOPAS_FLY_SPEED 0.15f
 
 #define KOOPAS_BBOX_WIDTH 17

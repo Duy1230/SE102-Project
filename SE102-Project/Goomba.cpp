@@ -82,6 +82,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	if (vy > GOOMBA_MAX_SPEED)
+		vy = GOOMBA_MAX_SPEED;
+
 	if ( (state==GOOMBA_STATE_DIE || state == GOOMBA_STATE_DIE_KOOPAS) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
 	{
 		isDeleted = true;

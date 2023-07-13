@@ -6,6 +6,7 @@
 #include "Mario.h"
 #include "MiniMario.h"
 #include "PlayScene.h"
+#include "Background.h"
 
 #include "AssetIDs.h"
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
@@ -14,13 +15,36 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	if (current_screen->GetId() == TITLE_SCREEN)
 	{
-		switch (KeyCode)
+		CBackground* b= (CBackground*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		int type = b->GetType();
+		if (type != ID_TYPE_PLAYER_MODE_NULL)
 		{
-		case DIK_S:
-		{
-			CGame::GetInstance()->InitiateSwitchScene(MAP_SCREEN);
-		}
-		break;
+			switch (KeyCode)
+			{
+			case DIK_UP:
+			{
+				if (type == ID_TYPE_PLAYER_MODE_SINGLE)
+					b->SetState(ID_TYPE_PLAYER_MODE_SINGLE, TURN_MULTI_PLAYER);
+				else
+					b->SetState(ID_TYPE_PLAYER_MODE_MULTI, TURN_SINGLE_PLAYER);
+				break;
+			}
+
+			case DIK_DOWN:
+			{
+				if (type == ID_TYPE_PLAYER_MODE_SINGLE)
+					b->SetState(ID_TYPE_PLAYER_MODE_SINGLE, TURN_MULTI_PLAYER);
+				else
+					b->SetState(ID_TYPE_PLAYER_MODE_MULTI, TURN_SINGLE_PLAYER);
+				break;
+			}
+
+			case DIK_S:
+			{
+				CGame::GetInstance()->InitiateSwitchScene(MAP_SCREEN);
+			}
+			break;
+			}
 		}
 	}
 

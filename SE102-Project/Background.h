@@ -15,6 +15,9 @@
 #define ID_ANI_3 24040
 #define ID_ANI_3_FLASHY 24041
 
+#define ID_ANI_PLAYER_MODE_NULL 24050
+#define	ID_ANI_PLAYER_MODE_SINGLE 24051
+#define	ID_ANI_PLAYER_MODE_MULTI 24052
 //############################################# TYPE #########################################
 #define ID_TYPE_MAP 0
 
@@ -28,6 +31,9 @@
 #define ID_TYPE_3 40
 #define ID_TYPE_3_FLASHY 41
 
+#define ID_TYPE_PLAYER_MODE_NULL 50
+#define ID_TYPE_PLAYER_MODE_SINGLE 51
+#define ID_TYPE_PLAYER_MODE_MULTI 52
 //BACKGROUND INFORMATION
 //state:
 #define TURN_BLACK 10
@@ -55,6 +61,16 @@
 //velocity:
 #define THREE_SPEED_Y 0.3f
 
+//PLAYER MODE INFORMATION
+//states:
+#define TURN_SINGLE_PLAYER 10
+#define TURN_MULTI_PLAYER 11
+
+
+
+
+
+#define INTERACTIVE_BACKGROUND 50
 class CBackground : public CGameObject {
 public:
 	int type;
@@ -72,13 +88,18 @@ public:
 	int IsBlocking() { return 0; }
 	void SetAniID();
 	void SetType(int new_type);
+	int GetType() { return type; }
 
 	void SetState(int type, int state);
 
 	void SetBackgroundState(int state);
 	void SetCurtainState(int state);
 	void SetTitleState(int state);
+
 	void SetThreeState(int state);
 
+	void SetPlayerModeNullState(int state);
+	void SetPlayerModeSingleState(int state);
+	void SetPlayerModeMultiState(int state);
 };
 

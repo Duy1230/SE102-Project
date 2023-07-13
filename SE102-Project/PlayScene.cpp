@@ -120,12 +120,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	//	obj = currentplayer->SetPosition(x,y);
 	//	player = (CMario*)obj;
 	case OBJECT_TYPE_MARIO:
-		if (player != NULL)
+		if (player != NULL && dynamic_cast<CMario*>(player))
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x, y);
+		else if (player != NULL && dynamic_cast<CBackground*>(player))
+		{
+			obj = new CMario(x, y, (int)atof(tokens[3].c_str()));
+			break;
+		}
+		obj = new CMario(x, y, (int)atof(tokens[3].c_str()));
 		player = (CMario*)obj;
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
@@ -138,8 +143,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FGOOMBA: obj = new FGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK_BUTTON: obj = new CBrickButton(x, y, (int)atof(tokens[3].c_str()), (int)atof(tokens[4].c_str())); break;
 	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y, (int)atof(tokens[3].c_str())); break;
-	case OBJECT_TYPE_BACKGROUND: obj = new CBackground(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_CONTROLLER: obj = new Controller(x, y); break;
+	case OBJECT_TYPE_BACKGROUND:
+	{
+		if (player == NULL && (int)atof(tokens[3].c_str()) == INTERACTIVE_BACKGROUND)
+		{
+			obj = new CBackground(x, y, (int)atof(tokens[3].c_str()));
+			player = (CBackground*)obj;
+			DebugOut(L"[INFO] Player object has been created!\n");
+			break;
+		}
+		obj = new CBackground(x, y, (int)atof(tokens[3].c_str())); break;
+	}
 	case OBJECT_TYPE_MINIMARIO:
 	{
 		if (player != NULL)

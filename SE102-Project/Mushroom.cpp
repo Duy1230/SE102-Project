@@ -32,6 +32,9 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	if (vy > MUSHROOM_MAX_SPEED)
+		vy = MUSHROOM_MAX_SPEED;
+
 	if ((state == MUSHROOM_STATE_INIT) && (GetTickCount64() - timeAppear > MUSHROOM_TIMEOUT))
 	{
 		this->SetState(MUSHROOM_STATE_MOVE);

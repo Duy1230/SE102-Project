@@ -30,6 +30,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vy += ay * dt;
 		vx += ax * dt;
 
+		if (vy > MARIO_MAX_SPEED)
+			vy = MARIO_MAX_SPEED;
+
 	}
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 	if (abs(vy) > 0.05f) isOnPlatform = false;

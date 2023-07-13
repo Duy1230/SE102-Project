@@ -16,6 +16,7 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.2f
 #define MARIO_FLY_UP_SPEED	0.2f
 #define MARIO_TUNNEL_SPEED	0.04f
+#define MARIO_MAX_SPEED 0.2f
 
 #define MARIO_GRAVITY			0.0004f
 
@@ -234,7 +235,7 @@ public:
 	BOOLEAN isKeyDown;
 	BOOLEAN tunneling;
 	BOOLEAN isOnPipe = 0;
-	CMario(float x, float y) : CGameObject(x, y)
+	CMario(float x, float y, int setlevel) : CGameObject(x, y)
 	{
 		isSitting = false;
 		maxVx = 0.0f;
@@ -242,7 +243,7 @@ public:
 		ay = MARIO_GRAVITY; 
 		isHolding = false;
 		isKeyDown = false;
-		level = MARIO_LEVEL_SMALL;
+		level = setlevel;
 		untouchable = 0;
 		untouchable_start = -1;
 		isAttacking = -1;
@@ -282,6 +283,7 @@ public:
 	void setAttacking();
 	void setFlying();
 	void setSlowFalling();
+	void setnx(int new_nx) { nx = new_nx; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

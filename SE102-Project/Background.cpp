@@ -56,6 +56,18 @@ void CBackground::SetAniID()
 	case ID_TYPE_3_FLASHY:
 		aniID = ID_ANI_3_FLASHY;
 		break;
+
+	case ID_TYPE_PLAYER_MODE_NULL:
+		aniID = ID_ANI_PLAYER_MODE_NULL;
+		break;
+
+	case ID_TYPE_PLAYER_MODE_SINGLE:
+		aniID = ID_ANI_PLAYER_MODE_SINGLE;
+		break;
+
+	case ID_TYPE_PLAYER_MODE_MULTI:
+		aniID = ID_ANI_PLAYER_MODE_MULTI;
+		break;
 	}
 }
 
@@ -93,6 +105,21 @@ void CBackground::SetState(int IDtype, int state)
 			case ID_TYPE_3:
 				if (obj->type == IDtype)
 					obj->SetThreeState(state);
+				break;
+
+			case ID_TYPE_PLAYER_MODE_NULL:
+				if (obj->type == IDtype)
+					obj->SetPlayerModeNullState(state);
+				break;
+
+			case ID_TYPE_PLAYER_MODE_SINGLE:
+				if (obj->type == IDtype)
+					obj->SetPlayerModeSingleState(state);
+				break;
+
+			case ID_TYPE_PLAYER_MODE_MULTI:
+				if (obj->type == IDtype)
+					obj->SetPlayerModeMultiState(state);
 				break;
 			}
 		}
@@ -155,3 +182,37 @@ void CBackground::SetThreeState(int state)
 	}
 }
 
+void CBackground::SetPlayerModeNullState(int state)
+{
+	switch (state)
+	{
+	case TURN_SINGLE_PLAYER:
+		SetType(ID_TYPE_PLAYER_MODE_SINGLE);
+		break;
+
+	case TURN_MULTI_PLAYER:
+		SetType(ID_TYPE_PLAYER_MODE_MULTI);
+		break;
+	}
+}
+
+void CBackground::SetPlayerModeSingleState(int state)
+{
+	switch (state)
+
+	case TURN_MULTI_PLAYER:
+	{
+		SetType(ID_TYPE_PLAYER_MODE_MULTI);
+		break;
+	}
+}
+
+void CBackground::SetPlayerModeMultiState(int state)
+{
+	switch (state)
+	{
+	case TURN_SINGLE_PLAYER:
+		SetType(ID_TYPE_PLAYER_MODE_SINGLE);
+		break;
+	}
+}

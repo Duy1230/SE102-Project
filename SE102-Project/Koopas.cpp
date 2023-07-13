@@ -347,6 +347,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float mario_x = ((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetX();
 	vy += ay * dt;
 	vx += ax * dt;
+
+	if (vy > KOOPAS_MAX_SPEED)
+		vy = KOOPAS_MAX_SPEED;
+
 	if (state == KOOPAS_STATE_STOP && isOnPlatform)
 		this->ay = 0;
 	if (state == KOOPAS_STATE_STOP && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT * 0.8))
