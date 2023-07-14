@@ -1,5 +1,6 @@
 #include "Button.h"
 #include "BrickButton.h"
+#include "Point.h"
 
 #include "PlayScene.h"
 #include "GameObject.h"

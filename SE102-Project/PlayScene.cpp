@@ -332,7 +332,10 @@ void CPlayScene::Update(DWORD dt)
 			if (cy > 10) cy = 10;
 		}
 		else
+		{
 			if (cy > 10) cy = 10;
+			if (cy < -200) cy = -200;
+		}
 	}
 	else if (game->GetScreenId() == MAP_SCREEN)
 	{

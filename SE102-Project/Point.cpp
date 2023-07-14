@@ -4,7 +4,10 @@ void CPoint::Render()
 {
 	int ID = ID_ANI_POINT + ID_Point;
 	if (ID > 19004)
+	{
 		ID = 19004;
+		ID_Point = 0;
+	}
 	CAnimations::GetInstance()->Get(ID)->Render(x, y);
 }
 
@@ -21,10 +24,22 @@ void CPoint::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x += vx * dt;
 	y += vy * dt;
 
-	if (GetTickCount64() - TimeAppear > POINT_TIMEOUT)
+	if (isMoving)
 	{
-		isDeleted = true;
-		return;
+		if(GetTickCount64() - TimeAppear > POINT_TIMEOUT)
+			isDeleted = true;
+	}
+
+	else if (ID_Point == COIN_SPARK)
+	{
+		if(GetTickCount64() - TimeAppear > COIN_SPARK_TIME_OUT)
+			isDeleted = true;
+	}
+
+	else if (ID_Point == DUST)
+	{
+		if (GetTickCount64() - TimeAppear > DUST_TIME_OUT)
+			isDeleted = true;
 	}
 
 	CGameObject::Update(dt, coObjects);

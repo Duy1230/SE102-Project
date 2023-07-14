@@ -18,6 +18,7 @@ void Controller::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void Controller::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	static int time_interval = 0;
 	static int title_screen_timer = 0;
 	int current_screen_id = CGame::GetInstance()->GetCurrentScene()->GetId();
 
@@ -57,7 +58,7 @@ void Controller::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(mushroom, 100, -100);
 
 			CGameObject* goomba = new CGoomba(160, -500);
-			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(goomba, 350, -480);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(goomba, 400, -480);
 
 			CGameObject* koopas = new CKoopas(180, -500, 0, 0);
 			koopas->SetState(KOOPAS_STATE_STOP);
@@ -114,7 +115,7 @@ void Controller::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					CMario* m = dynamic_cast<CMario*>(objects[i]);
 					m->SetState(MARIO_STATE_IDLE);
-					m->setnx(-1);
+					m->setnx(1);
 					title_screen_timer++;
 					break;
 				}
@@ -130,14 +131,35 @@ void Controller::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					CMario* m = dynamic_cast<CMario*>(objects[i]);
 					m->SetState(MARIO_STATE_JUMP);
-					m->setnx(-1);
 					title_screen_timer++;
 					break;
 				}
 			}
 		}
 
-		else if (GetTickCount64() - timeLine > TIME_TITLE_SCREEN_MARIO_FINAL && title_screen_timer == 9)
+		else if (GetTickCount64() - timeLine > TIME_TITLE_SCREEN_MARIO_TAIL_FLAP + time_interval  && title_screen_timer == 9)
+		{
+			vector<LPGAMEOBJECT> objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->getObjects();
+			for (size_t i = 1; i < objects.size(); i++)
+			{
+				if (time_interval == 450)
+				{
+					time_interval = 0;
+					title_screen_timer++;
+					break;
+				}
+				if (dynamic_cast<CMario*>(objects[i]))
+				{
+					CMario* m = dynamic_cast<CMario*>(objects[i]);
+					m->SetState(MARIO_STATE_WALKING_RIGHT);
+					m->setSlowFalling();
+					time_interval += 100;
+					//break;
+				}
+			}
+			}
+
+		else if (GetTickCount64() - timeLine > TIME_TITLE_SCREEN_MARIO_FINAL && title_screen_timer == 10)
 		{
 			vector<LPGAMEOBJECT> objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->getObjects();
 			for (size_t i = 1; i < objects.size(); i++)
@@ -146,7 +168,6 @@ void Controller::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					CMario* m = dynamic_cast<CMario*>(objects[i]);
 					m->SetState(MARIO_STATE_WALKING_RIGHT);
-					m->setnx(-1);
 					title_screen_timer++;
 					break;
 				}

@@ -35,7 +35,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	}
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-	if (abs(vy) > 0.05f) isOnPlatform = false;
+	if (abs(vy) > 0.05f)
+	{
+		isOnPlatform = false;
+	}
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -324,6 +327,8 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	if (b->aniID != ID_ANI_COIN_Q)
 	{
 		e->obj->Delete();
+		CGameObject* point = new CPoint(this->GetX(), this->GetY(), COIN_SPARK, false);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY());
 		coin++;
 	}
 }
@@ -345,6 +350,12 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	{
 		this->SetLevel(MARIO_LEVEL_BIG);
 		CGameObject* point = new CPoint(this->GetX(), this->GetY(), 4);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
+	}
+
+	else if (m->getType() == MUSHROOM_TYPE_GREEN)
+	{
+		CGameObject* point = new CPoint(this->GetX(), this->GetY(), -1);
 		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, this->GetX(), this->GetY() - 30);
 	}
 }
@@ -389,6 +400,8 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		{
 			CGameObject* button = new CButton(brick->GetX(), brick->GetY(), brick->getID());
 			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(button, brick->GetX(), brick->GetY() - 16);
+			CGameObject* point = new CPoint(x, y, DUST, false);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, x - 5, y - 30);
 		}
 		break;
 

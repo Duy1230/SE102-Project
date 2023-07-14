@@ -5,7 +5,7 @@ void IBlock::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ID_ANI_IBLOCK)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void IBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
