@@ -135,6 +135,7 @@
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="BrickButton.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ScreenController.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickButton.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Card.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="debug.h" />

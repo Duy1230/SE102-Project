@@ -117,7 +117,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		int level = mario->Getlevel();
 		int state = mario->GetState();
-		if (!mario->tunneling)
+		if (!mario->tunneling || !mario->isWinning)
 		{
 			switch (KeyCode)
 			{
@@ -135,6 +135,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 				break;
 			case DIK_S:
 			{
+				if(state == MARIO_STATE_DIE)
+					CGame::GetInstance()->InitiateSwitchScene(MAP_SCREEN);
 				if (level == MARIO_LEVEL_FOX)
 				{
 					if (mario->IsFlying())
@@ -189,7 +191,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	if (current_screen->GetId() == PLAY_SCREEN)
 	{
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-		if (!mario->tunneling)
+		if (!mario->tunneling && !mario->isWinning)
 		{
 			switch (KeyCode)
 			{
@@ -211,12 +213,12 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 {
 	LPGAME game = CGame::GetInstance();
 	CScene* current_screen = CGame::GetInstance()->GetCurrentScene();
-	if (current_screen->GetId() == PLAY_SCREEN)
+	if (current_screen->GetId() == PLAY_SCREEN )
 	{
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		int level = mario->Getlevel();
 		int state = mario->GetState();
-		if (!mario->tunneling)
+		if (!mario->tunneling && !mario->isWinning)
 		{
 			if (game->IsKeyDown(DIK_RIGHT))
 			{

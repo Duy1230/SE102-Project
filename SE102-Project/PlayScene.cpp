@@ -18,6 +18,7 @@
 #include "Background.h"
 #include "MiniMario.h"
 #include "ScreenController.h"
+#include "Card.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -144,6 +145,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK_BUTTON: obj = new CBrickButton(x, y, (int)atof(tokens[3].c_str()), (int)atof(tokens[4].c_str())); break;
 	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y, (int)atof(tokens[3].c_str())); break;
 	case OBJECT_TYPE_CONTROLLER: obj = new Controller(x, y); break;
+	case OBJECT_TYPE_CARD: obj = new CCard(x, y); break;
 	case OBJECT_TYPE_BACKGROUND:
 	{
 		if (player == NULL && (int)atof(tokens[3].c_str()) == INTERACTIVE_BACKGROUND)

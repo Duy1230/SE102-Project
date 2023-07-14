@@ -20,11 +20,37 @@
 #include "Button.h"
 #include "BrickButton.h"
 #include "Pipe.h"
+#include "Card.h"
 
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	static int timer = 0;
+	if (isWinning && isOnPlatform && timer == 0)
+	{
+		SetState(MARIO_STATE_WALKING_RIGHT);
+		timer++;
+	}
+
+	if (isWinning && (GetTickCount64() - finaleText > FINALE_TEXT_TIME) && timer == 1)
+	{
+		vector<LPGAMEOBJECT> objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->getObjects();
+		for (size_t i = 1; i < objects.size(); i++)
+		{
+			if (dynamic_cast<CCard*>(objects[i]))
+			{
+				CCard* c = dynamic_cast<CCard*>(objects[i]);
+				c->Stop();
+				c->SetPosition(2940, 70);
+			}
+		}
+		CGameObject* c = new CCard(FINALE_TEXT_LOCATION_X, FINALE_TEXT_LOCATION_Y, ID_ANI_CARD_TEXT);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(c, FINALE_TEXT_LOCATION_X, FINALE_TEXT_LOCATION_Y);
+		timer++;
+	}
+	if (y > 200)
+		SetState(MARIO_STATE_DIE);
 	if (state != MARIO_STATE_UP && state != MARIO_STATE_DOWN)
 	{
 		vy += ay * dt;
@@ -124,6 +150,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBrickButton(e);
 	else if (dynamic_cast<CPipe*>(e->obj))
 		OnCollisionWithPipe(e);
+	else if (dynamic_cast<CCard*>(e->obj))
+		OnCollisionWithCard(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -503,6 +531,14 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e)
 		}
 	}
 		
+}
+
+void CMario::OnCollisionWithCard(LPCOLLISIONEVENT e)
+{
+	CCard* c = dynamic_cast<CCard*>(e->obj);
+	isWinning = true;
+	finaleText = GetTickCount64();
+	c->Collided();
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)

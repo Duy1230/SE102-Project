@@ -10,11 +10,11 @@
 #define MARIO_RUNNING_SPEED		0.15f
 
 #define MARIO_ACCEL_WALK_X	0.00025f
-#define MARIO_ACCEL_RUN_X	0.00003f
+#define MARIO_ACCEL_RUN_X	0.000035f
 
-#define MARIO_JUMP_SPEED_Y		0.2f
+#define MARIO_JUMP_SPEED_Y		0.21f
 #define MARIO_JUMP_RUN_SPEED_Y	0.2f
-#define MARIO_FLY_UP_SPEED	0.2f
+#define MARIO_FLY_UP_SPEED	0.16f
 #define MARIO_TUNNEL_SPEED	0.04f
 #define MARIO_MAX_SPEED 0.2f
 
@@ -178,17 +178,20 @@
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
 
-#define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_UNTOUCHABLE_TIME 2000
 #define MARIO_FLY_TIME	5000
 
 #define MARIO_ATTACK_TIME 230
 #define MARIO_FLAP_TIME 200
 #define MARIO_SLOW_FALLING_TIME 150
 #define MARIO_TUNNELING_TIME 1620
+#define FINALE_TEXT_TIME 600
 
 #define MARIO_UNTOUCHABLE_SPRITE_LOWERBOUND 8
 #define MARIO_UNTOUCHABLE_SPRITE_UPPERBOUND 16
 
+#define FINALE_TEXT_LOCATION_X 2850
+#define FINALE_TEXT_LOCATION_Y 60
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -207,6 +210,7 @@ class CMario : public CGameObject
 	ULONGLONG isFlapping;
 	ULONGLONG isSlowFalling;
 	ULONGLONG isTunnelling;
+	ULONGLONG finaleText;
 
 	ULONGLONG flyTime;
 	BOOLEAN isOnPlatform;
@@ -225,18 +229,21 @@ class CMario : public CGameObject
 	void OnCollisionWithButton(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrickButton(LPCOLLISIONEVENT e);
 	void OnCollisionWithPipe(LPCOLLISIONEVENT e);
+	void OnCollisionWithCard(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdFox();
 
 public:
+	BOOLEAN isWinning;
 	BOOLEAN isHolding;
 	BOOLEAN isKeyDown;
 	BOOLEAN tunneling;
 	BOOLEAN isOnPipe = 0;
 	CMario(float x, float y, int setlevel) : CGameObject(x, y)
 	{
+		isWinning = false;
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
@@ -250,6 +257,7 @@ public:
 		isFlapping = -1;
 		isSlowFalling = -1;
 		isTunnelling = -1;
+		finaleText = -1;
 		tunneling = false;
 		flyTime = -1;
 		isOnPlatform = false;

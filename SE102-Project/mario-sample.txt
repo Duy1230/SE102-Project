@@ -25,3 +25,4 @@ height	240
 80	textures\mario_affect.png
 90	textures\map.png
 100	textures\title.png
+110	textures\clear.png
