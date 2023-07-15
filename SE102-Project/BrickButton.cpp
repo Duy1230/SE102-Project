@@ -17,3 +17,13 @@ void CBrickButton::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + BRICK_BUTTON_BBOX_HEIGHT;
 }
 
+void CBrickButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (GetTickCount64() - timeTurnBack > TIME_TURN_BACK && AniID == ID_ANI_BRICK_BUTTON_COIN)
+	{
+		this->AniID = ID_ANI_BRICK_BUTTON_GLASSBRICK;
+	}
+
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
