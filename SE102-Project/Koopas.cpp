@@ -608,9 +608,9 @@ void CKoopas::SetState(int state)
 		this->ay = KOOPAS_GRAVITY;
 		die_start = -1;
 		if (mario->GetNx() > 0)
-			vx = 5 * KOOPAS_WALKING_SPEED;
+			vx = 4 * KOOPAS_WALKING_SPEED;
 		else
-			vx = -5 * KOOPAS_WALKING_SPEED;
+			vx = -4 * KOOPAS_WALKING_SPEED;
 		vy = 0;
 	}
 	break;
