@@ -142,8 +142,6 @@ void CAttack::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 		{
 			CGameObject* button = new CButton(brick->GetX(), brick->GetY(), brick->getID());
 			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(button, brick->GetX(), brick->GetY() - 16);
-			CGameObject* point = new CPoint(brick->GetX(), brick->GetY(), DUST, false);
-			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(point, brick->GetX() - 5, brick->GetY() - 20);
 		}
 		break;
 
